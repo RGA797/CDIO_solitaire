@@ -6,14 +6,9 @@ class solitaireSolver {
     val rows = Rows()
 
 
-
-    fun canMove(): Boolean{
-
-    }
-
     fun getRowWithAceOrTwo(): Int?{
         for (i in 0..6) {
-            for (j in rows.testList[i]) {
+            for (j in rows.bottomList[i]) {
                 if (j.isDowncard){
                     continue
                 }
