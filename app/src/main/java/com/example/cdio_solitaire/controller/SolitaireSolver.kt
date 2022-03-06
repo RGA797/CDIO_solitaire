@@ -8,13 +8,12 @@ class SolitaireSolver {
     val columns = Columns()
 
 
-    fun getColumnWithAceOrTwo(): Int?{
+    fun getColumnWithAceOrTwo(): Int? {
         for (i in 0..6) {
             for (j in columns.bottomList[i]) {
-                if (j.isDowncard){
+                if (j.isDowncard) {
                     continue
-                }
-                else if (j.rank == 1)
+                } else if (j.rank == 1)
                     return i
                 else if (j.rank == 2)
                     return i
@@ -25,20 +24,20 @@ class SolitaireSolver {
 
     fun isValidMove(i: Int, cardToMove: Card, cardToMoveTo: Card): Boolean? {
 
-        var colorMoveValid : Boolean = false
-        var rankMoveValid : Boolean = false
+        var colorMoveValid: Boolean = false
+        var rankMoveValid: Boolean = false
 
-        if (cardToMove.suit == "S" || cardToMove.suit == "C" && cardToMoveTo.suit == "D" || cardToMoveTo.suit == "H"){//black card
+        if (cardToMove.suit == "S" || cardToMove.suit == "C" && cardToMoveTo.suit == "D" || cardToMoveTo.suit == "H") {//black card
             colorMoveValid = true
-        } else if (cardToMove.suit =="D" || cardToMove.suit =="H" && cardToMoveTo.suit == "S" || cardToMoveTo.suit == "C"){ //red card
+        } else if (cardToMove.suit == "D" || cardToMove.suit == "H" && cardToMoveTo.suit == "S" || cardToMoveTo.suit == "C") { //red card
             colorMoveValid = true
         }
 
-        if (cardToMove.rank+1 == cardToMoveTo.rank){ //Rank move valid
+        if (cardToMove.rank + 1 == cardToMoveTo.rank) { //Rank move valid
             rankMoveValid = true
         }
 
-        return if (colorMoveValid && rankMoveValid){ //Valid move
+        return if (colorMoveValid && rankMoveValid) { //Valid move
             moveCard(i, cardToMove, cardToMoveTo)
             true
         } else { //Move not valid
@@ -48,15 +47,15 @@ class SolitaireSolver {
     }
 
     fun isValidMoveTopColumn(i: Int, cardToMove: Card, cardToMoveTo: Card): Boolean? {
-        var suitMoveValid : Boolean = false
-        var rankMoveValid : Boolean = false
+        var suitMoveValid: Boolean = false
+        var rankMoveValid: Boolean = false
 
 
-        if (cardToMove.suit == cardToMoveTo.suit || (cardToMove.rank == 1 && cardToMoveTo.suit == NULL)){
+        if (cardToMove.suit == cardToMoveTo.suit || (cardToMove.rank == 1 && cardToMoveTo.suit == NULL)) {
             suitMoveValid = true
         }
 
-        if (cardToMove.rank-1 == cardToMoveTo.rank){ //Rank move valid
+        if (cardToMove.rank - 1 == cardToMoveTo.rank) { //Rank move valid
             rankMoveValid = true
         }
 
@@ -64,7 +63,8 @@ class SolitaireSolver {
             rankMoveValid = true
         }
 
-        return if (suitMoveValid && rankMoveValid){ //Valid move
+
+        return if (suitMoveValid && rankMoveValid) { //Valid move
             moveCard(i, cardToMove, cardToMoveTo)
             true
         } else { //Move not valid
@@ -76,9 +76,6 @@ class SolitaireSolver {
 
 
     fun moveCard(i: Int, cardToMove: Card, cardToMoveTo: Card) {
-
-
-
 
 
     }
