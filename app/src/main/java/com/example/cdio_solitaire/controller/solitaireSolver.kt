@@ -22,13 +22,33 @@ class solitaireSolver {
         return null
     }
 
-    fun moveCard(i: Int, card: Card) {
-        var cardColor : Boolean //black -> true, red -> false
-        if (card.suit == "S" || card.suit == "C"){//black card
-            cardColor = true
-        } else if (card.suit =="D" || card.suit =="H"){ //red card
-            cardColor = false
+    fun isValidMove(i: Int, cardToMove: Card, cardToMoveTo: Card): Boolean? {
+
+        var colorMoveValid : Boolean = false
+        var rankMoveValid : Boolean = false
+
+        if (cardToMove.suit == "S" || cardToMove.suit == "C" && cardToMoveTo.suit == "D" || cardToMoveTo.suit == "H"){//black card
+            colorMoveValid = true
+        } else if (cardToMove.suit =="D" || cardToMove.suit =="H" && cardToMoveTo.suit == "S" || cardToMoveTo.suit == "C"){ //red card
+            colorMoveValid = true
         }
+
+        if (cardToMove.rank+1 == cardToMoveTo.rank){ //Rank move valid
+            rankMoveValid = true
+        }
+
+        if (colorMoveValid && rankMoveValid){ //Valid move
+            moveCard(i, cardToMove, cardToMoveTo)
+            return true
+        } else { //Move not valid
+            return false
+        }
+
+    }
+
+
+    fun moveCard(i: Int, cardToMove: Card, cardToMoveTo: Card) {
+
 
 
 
