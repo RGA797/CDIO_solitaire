@@ -1,15 +1,15 @@
 package com.example.cdio_solitaire.controller
 
 import com.example.cdio_solitaire.Model.Card
-import com.example.cdio_solitaire.Model.Rows
+import com.example.cdio_solitaire.Model.Columns
 
 class solitaireSolver {
-    val rows = Rows()
+    val columns = Columns()
 
 
     fun getRowWithAceOrTwo(): Int?{
         for (i in 0..6) {
-            for (j in rows.bottomList[i]) {
+            for (j in columns.bottomList[i]) {
                 if (j.isDowncard){
                     continue
                 }
@@ -37,11 +37,11 @@ class solitaireSolver {
             rankMoveValid = true
         }
 
-        if (colorMoveValid && rankMoveValid){ //Valid move
+        return if (colorMoveValid && rankMoveValid){ //Valid move
             moveCard(i, cardToMove, cardToMoveTo)
-            return true
+            true
         } else { //Move not valid
-            return false
+            false
         }
 
     }
