@@ -2,12 +2,13 @@ package com.example.cdio_solitaire.controller
 
 import com.example.cdio_solitaire.Model.Card
 import com.example.cdio_solitaire.Model.Columns
+import org.json.JSONObject.NULL
 
-class solitaireSolver {
+class SolitaireSolver {
     val columns = Columns()
 
 
-    fun getRowWithAceOrTwo(): Int?{
+    fun getColumnWithAceOrTwo(): Int?{
         for (i in 0..6) {
             for (j in columns.bottomList[i]) {
                 if (j.isDowncard){
@@ -43,6 +44,33 @@ class solitaireSolver {
         } else { //Move not valid
             false
         }
+
+    }
+
+    fun isValidMoveTopColumn(i: Int, cardToMove: Card, cardToMoveTo: Card): Boolean? {
+        var suitMoveValid : Boolean = false
+        var rankMoveValid : Boolean = false
+
+
+        if (cardToMove.suit == cardToMoveTo.suit || (cardToMove.rank == 1 && cardToMoveTo.suit == NULL)){
+            suitMoveValid = true
+        }
+
+        if (cardToMove.rank-1 == cardToMoveTo.rank){ //Rank move valid
+            rankMoveValid = true
+        }
+
+        if (cardToMove.rank == 1 && cardToMoveTo.rank == NULL) {
+            rankMoveValid = true
+        }
+
+        return if (suitMoveValid && rankMoveValid){ //Valid move
+            moveCard(i, cardToMove, cardToMoveTo)
+            true
+        } else { //Move not valid
+            false
+        }
+
 
     }
 
