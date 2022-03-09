@@ -23,6 +23,4 @@ class ExampleUnitTest {
         println("solution!: " + solution[0].rank + solution[0].suit + ", " + solution[1].rank + solution[1].suit )
         }
     }
-
-
 }
