@@ -10,10 +10,14 @@ class SolitaireSolver {
     fun solve(): String{
 
         //kan vi bruge rule 1
+        if (ruleOne() != null){
 
+        }
 
         //kan vi bruge rule 2
+        else if (ruleTwo() != null ){
 
+        }
         //
 
         //
@@ -24,15 +28,59 @@ class SolitaireSolver {
     }
 
 
-    fun ruleTwo(){
+    //returns the card with most backturned cards behind it
+    fun ruleTwo(): MutableList<Card?> {
+        val longestColumns = getLongestBottomColumns()
+
+        for (i in longestColumns){
+            if (columnHasBackrow(i)){
+                return (columns.bottomList[i][0])
+            }
+        }
+        return null
 
     }
 
-    //returns the card with most backturned cards behind it
+    fun columnHasBackrow(column_index: Int): Boolean {
+        for (j in columns.bottomList[column_index]) {
+            if (j.isDowncard){
+                return true
+            }
+        }
+        return false
+    }
 
+    fun getLongestBottomColumns(): MutableList<Int> {
+        var longest_backrow_size = 0
+        var longest_column_indexes = mutableListOf<Int>()
+        for (collumn_index in 0..6) {
+            var local_column_length = 0
+            for (j in columns.bottomList[collumn_index]) {
+                local_column_length ++
+            }
 
+            if (local_column_length == longest_backrow_size){
+                longest_column_indexes.add(collumn_index)
+            }
 
+            if (local_column_length > longest_backrow_size){
+                longest_column_indexes = mutableListOf()
+                longest_backrow_size = local_column_length
+                longest_column_indexes.add(collumn_index)
+            }
+        }
+        return  longest_column_indexes
+    }
 
+    fun ruleOne(): Card? {
+        val validColumn = getColumnWithAceOrTwo()
+        if (validColumn!= null){
+            return columns.bottomList[validColumn][0]
+        }
+        else{
+            return null
+        }
+    }
 
     fun getColumnWithAceOrTwo(): Int? {
         for (i in 0..6) {
@@ -84,7 +132,6 @@ class SolitaireSolver {
         }
 
         return suitMoveValid && rankMoveValid
-
     }
 
 
