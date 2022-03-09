@@ -1,4 +1,6 @@
 package com.example.cdio_solitaire;
 
-public class Rule4 {
+public class Solitaire_Rule_5{
+
+
 }
