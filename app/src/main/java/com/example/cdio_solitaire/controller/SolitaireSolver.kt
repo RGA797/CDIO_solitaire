@@ -21,8 +21,6 @@ class SolitaireSolver {
 
         //
 
-
-
         return "solution"
     }
 
@@ -97,7 +95,6 @@ class SolitaireSolver {
     fun isValidMoveTopColumn(cardToMove: Card, cardToMoveTo: Card): Boolean {
         var suitMoveValid: Boolean = false
         var rankMoveValid: Boolean = false
-
 
         if (cardToMove.suit == cardToMoveTo.suit || (cardToMove.rank == 1 && cardToMoveTo.suit == NULL)) {
             suitMoveValid = true
