@@ -31,7 +31,34 @@ class SolitaireSolver {
     //returns the card with most backturned cards behind it
 
 
+    //Requirements:
+    // Do the move which frees or allows a move which frees the downturned card from the largest pile of downturned cards
+    fun ruleThree_FreeLargestPile(card: Card, columns: Columns): String{
 
+        //find largest pile of downturned cards
+        var downTurnedCards = 0
+        var tempNumberColumnWithMostDownTurnedCards = 0
+        var columnWithMostDownTurnedCards = 0
+        for (i in 0..6) {
+            for (j in columns.bottomList[i]){
+                if (j.isDowncard){
+                    downTurnedCards++
+                }
+            }
+            if (downTurnedCards > tempNumberColumnWithMostDownTurnedCards){
+                tempNumberColumnWithMostDownTurnedCards = downTurnedCards
+                columnWithMostDownTurnedCards = i
+            }
+            downTurnedCards = 0; //reset
+        }
+        return "index: " + downTurnedCards.toString() + " has the most downturned cards"
+
+    }
+
+    fun ruleFour_ColumnToColumn(): String{
+
+        return "something"
+    }
 
 
     fun getColumnWithAceOrTwo(): Int? {
