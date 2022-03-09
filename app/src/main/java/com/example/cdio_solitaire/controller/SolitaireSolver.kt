@@ -13,7 +13,6 @@ class SolitaireSolver {
         if (ruleOne() != null){
 
         }
-
         //kan vi bruge rule 2
         else if (ruleTwo() != null ){
 
@@ -27,77 +26,58 @@ class SolitaireSolver {
         return "solution"
     }
 
-
-    //returns the card with most backturned cards behind it
-    fun ruleTwo(): MutableList<Card?> {
-        val longestColumns = getLongestBottomColumns()
-
-        for (i in longestColumns){
-            if (columnHasBackrow(i)){
-                return (columns.bottomList[i][0])
-            }
-        }
-        return null
-
-    }
-
-    fun columnHasBackrow(column_index: Int): Boolean {
-        for (j in columns.bottomList[column_index]) {
-            if (j.isDowncard){
-                return true
-            }
-        }
-        return false
-    }
-
-    fun getLongestBottomColumns(): MutableList<Int> {
-        var longest_backrow_size = 0
-        var longest_column_indexes = mutableListOf<Int>()
-        for (collumn_index in 0..6) {
-            var local_column_length = 0
-            for (j in columns.bottomList[collumn_index]) {
-                local_column_length ++
-            }
-
-            if (local_column_length == longest_backrow_size){
-                longest_column_indexes.add(collumn_index)
-            }
-
-            if (local_column_length > longest_backrow_size){
-                longest_column_indexes = mutableListOf()
-                longest_backrow_size = local_column_length
-                longest_column_indexes.add(collumn_index)
-            }
-        }
-        return  longest_column_indexes
-    }
-
-    fun ruleOne(): Card? {
-        val validColumn = getColumnWithAceOrTwo()
-        if (validColumn!= null){
-            return columns.bottomList[validColumn][0]
-        }
-        else{
-            return null
-        }
-    }
-
-    fun getColumnWithAceOrTwo(): Int? {
-        for (i in 0..6) {
-            for (j in columns.bottomList[i]) {
-                if (j.isDowncard) {
-                    continue
-                } else if (j.rank == 1)
-                    return i
-                else if (j.rank == 2)
-                    return i
+    //returns a move that involves ace or two
+    fun ruleOne():  List<Card>? {
+        val validColumns = columns.getColumnsWithAceOrTwo()
+        if (validColumns.isNotEmpty()){
+            for (i in validColumns){
+                val viableMove = getViableMove(columns.getBottomList()[i][0])
+                if (viableMove != null){
+                    return (viableMove)
+                }
             }
         }
         return null
     }
 
-    fun isValidMove(i: Int, cardToMove: Card, cardToMoveTo: Card): Boolean {
+    //returns a move that can free up another card
+    fun ruleTwo(): List<Card>? {
+        val longestColumns = columns.getLongestBottomColumnsIndexes()
+        if (longestColumns.isNotEmpty()){
+            for (i in longestColumns){
+                if (columns.columnHasBackrow(i)){
+                    val viableMove = getViableMove(columns.getBottomList()[i][0])
+                    if (viableMove != null){
+                        return (viableMove)
+                    }
+                }
+            }
+        }
+        return null
+    }
 
+    fun ruleSix(): List<Card>? {
+        return null
+    }
+
+    //returns the first found set of cards that can be moved to, otherwise null.
+    //first index: from
+    //second index: to
+    fun getViableMove(card: Card): List<Card>? {
+        val bottomColumn = columns.getBottomList()
+        for (i in bottomColumn){
+            if (i[0] == card || i.isEmpty()){
+                continue
+            }
+            else if (isValidMove(card,i[0])){
+                return listOf(card, i[0])
+            }
+        }
+        return null
+    }
+
+
+    fun isValidMove(cardToMove: Card, cardToMoveTo: Card): Boolean {
         var colorMoveValid: Boolean = false
         var rankMoveValid: Boolean = false
 
@@ -114,7 +94,7 @@ class SolitaireSolver {
         return colorMoveValid && rankMoveValid
     }
 
-    fun isValidMoveTopColumn(i: Int, cardToMove: Card, cardToMoveTo: Card): Boolean {
+    fun isValidMoveTopColumn(cardToMove: Card, cardToMoveTo: Card): Boolean {
         var suitMoveValid: Boolean = false
         var rankMoveValid: Boolean = false
 
