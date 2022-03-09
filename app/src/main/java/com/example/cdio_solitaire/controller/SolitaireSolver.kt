@@ -19,7 +19,6 @@ class SolitaireSolver {
         if (ruleTwo() != null ){
             return  solution
         }
-
         return null
     }
 
@@ -43,9 +42,9 @@ class SolitaireSolver {
         if (longestColumns.isNotEmpty()){
             for (i in longestColumns){
                 if (columns.columnHasBackrow(i)){
-                    val viableMove = getViableMove(columns.getBottomList()[i][0])
+                    val viableMove = getViableMove(columns.getBottomList()[i][columns.getCardIndexOfFirstUpcard(i)])
                     if (viableMove != null){
-                        return (viableMove)
+                        return viableMove
                     }
                 }
             }

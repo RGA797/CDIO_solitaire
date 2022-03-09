@@ -33,6 +33,16 @@ class Columns() {
                 return false
         }
 
+        fun getCardIndexOfFirstUpcard(column_index: Int): Int {
+                var cardIndex = 0
+                for (j in bottomList[column_index]) {
+                        if (!j.isDowncard) {
+                                break
+                        }
+                        cardIndex++
+                }
+                return cardIndex
+        }
         fun getColumnsWithAceOrTwo(): MutableList<Int> {
                 val viableIndexes = mutableListOf<Int>()
                 for (i in 0..6) {
