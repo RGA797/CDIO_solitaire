@@ -7,6 +7,32 @@ import org.json.JSONObject.NULL
 class SolitaireSolver {
     val columns = Columns()
 
+    fun solve(): String{
+
+        //kan vi bruge rule 1
+
+
+        //kan vi bruge rule 2
+
+        //
+
+        //
+
+
+
+        return "solution"
+    }
+
+
+    fun ruleTwo(){
+
+    }
+
+    //returns the card with most backturned cards behind it
+
+
+
+
 
     fun getColumnWithAceOrTwo(): Int? {
         for (i in 0..6) {
@@ -22,7 +48,7 @@ class SolitaireSolver {
         return null
     }
 
-    fun isValidMove(i: Int, cardToMove: Card, cardToMoveTo: Card): Boolean? {
+    fun isValidMove(i: Int, cardToMove: Card, cardToMoveTo: Card): Boolean {
 
         var colorMoveValid: Boolean = false
         var rankMoveValid: Boolean = false
@@ -37,16 +63,10 @@ class SolitaireSolver {
             rankMoveValid = true
         }
 
-        return if (colorMoveValid && rankMoveValid) { //Valid move
-            moveCard(i, cardToMove, cardToMoveTo)
-            true
-        } else { //Move not valid
-            false
-        }
-
+        return colorMoveValid && rankMoveValid
     }
 
-    fun isValidMoveTopColumn(i: Int, cardToMove: Card, cardToMoveTo: Card): Boolean? {
+    fun isValidMoveTopColumn(i: Int, cardToMove: Card, cardToMoveTo: Card): Boolean {
         var suitMoveValid: Boolean = false
         var rankMoveValid: Boolean = false
 
@@ -63,21 +83,9 @@ class SolitaireSolver {
             rankMoveValid = true
         }
 
-
-        return if (suitMoveValid && rankMoveValid) { //Valid move
-            moveCard(i, cardToMove, cardToMoveTo)
-            true
-        } else { //Move not valid
-            false
-        }
-
+        return suitMoveValid && rankMoveValid
 
     }
 
-
-    fun moveCard(i: Int, cardToMove: Card, cardToMoveTo: Card) {
-
-
-    }
 
 }
