@@ -7,21 +7,20 @@ import org.json.JSONObject.NULL
 class SolitaireSolver {
     val columns = Columns()
 
-    fun solve(): String{
+    fun solve(): List<Card>? {
 
-        //kan vi bruge rule 1
+        //kan vi bruge rule 1?
+        var solution = ruleOne()
         if (ruleOne() != null){
-
+            return solution
         }
-        //kan vi bruge rule 2
-        else if (ruleTwo() != null ){
-
+        //kan vi bruge rule 2?
+        solution = ruleTwo()
+        if (ruleTwo() != null ){
+            return  solution
         }
-        //
 
-        //
-
-        return "solution"
+        return null
     }
 
     //returns a move that involves ace or two
