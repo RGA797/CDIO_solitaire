@@ -38,9 +38,9 @@ class SolitaireSolver {
 
     //returns a move that can free up another card
     fun ruleTwo(): List<Card>? {
-        val longestColumns = columns.getLongestBottomColumnsIndexes()
-        if (longestColumns.isNotEmpty()){
-            for (i in longestColumns){
+        val validColumns = columns.getBottomColumnsIndexesWithBackrow()
+        if (validColumns.isNotEmpty()){
+            for (i in validColumns){
                 if (columns.columnHasBackrow(i)){
                     val viableMove = getViableMove(columns.getBottomList()[i][columns.getCardIndexOfFirstUpcard(i)])
                     if (viableMove != null){

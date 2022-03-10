@@ -83,6 +83,19 @@ class Columns() {
                         }
                 }
                 return  longest_column_indexes
+
+        }
+        fun getBottomColumnsIndexesWithBackrow(): MutableList<Int> {
+                var validIndexes = mutableListOf<Int>()
+                for (collumn_index in 0..6) {
+                        for (card in bottomList[collumn_index]) {
+                                if (card.isDowncard){
+                                        validIndexes.add(collumn_index)
+                                        break
+                                }
+                        }
+                }
+                return  validIndexes
         }
 
 }
