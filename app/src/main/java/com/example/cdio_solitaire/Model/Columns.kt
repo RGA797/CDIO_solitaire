@@ -100,7 +100,7 @@ class Columns() {
         fun getCardIndexOfAceOrTwo(column_index: Int): Int{
                 var cardIndex = 0
                 for (j in bottomList[column_index]) {
-                        if (j.rank == 1 && j.rank == 2){
+                        if (j.rank == 1 || j.rank == 2){
                                 break
                         }
                         cardIndex++
