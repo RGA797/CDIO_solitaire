@@ -43,6 +43,7 @@ class Columns() {
                 }
                 return cardIndex
         }
+
         fun getColumnsWithAceOrTwo(): MutableList<Int> {
                 val viableIndexes = mutableListOf<Int>()
                 for (i in 0..6) {
@@ -59,8 +60,6 @@ class Columns() {
                         }
                 }
                         return viableIndexes
-
-
         }
 
         fun getLongestBottomColumnsIndexes(): MutableList<Int> {
@@ -98,4 +97,14 @@ class Columns() {
                 return  validIndexes
         }
 
+        fun getCardIndexOfAceOrTwo(column_index: Int): Int{
+                var cardIndex = 0
+                for (j in bottomList[column_index]) {
+                        if (j.rank == 1 && j.rank == 2){
+                                break
+                        }
+                        cardIndex++
+                }
+                return cardIndex
+        }
 }
