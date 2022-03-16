@@ -20,7 +20,12 @@ class ExampleUnitTest {
         var solitaireSolver = SolitaireSolver()
         val solution = solitaireSolver.solve()
         if (solution != null){
-        println("solution!: " + solution[0].rank + solution[0].suit + ", " + solution[1].rank + solution[1].suit )
+            if (solution[1] != null){
+                println("solution!: " + solution[0]!!.rank + solution[0]!!.suit + ", " + solution[1]!!.rank + solution[1]!!.suit )
+            }
+            else{
+                println("solution!: " + solution[0]!!.rank + solution[0]!!.suit + ", an empty column")
+            }
         }
     }
 }
