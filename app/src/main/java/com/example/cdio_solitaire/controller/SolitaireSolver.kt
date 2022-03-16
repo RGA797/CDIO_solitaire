@@ -81,9 +81,10 @@ class SolitaireSolver {
         var colorMoveValid: Boolean = false
         var rankMoveValid: Boolean = false
 
-        if (cardToMove.suit == "S" || cardToMove.suit == "C" && cardToMoveTo.suit == "D" || cardToMoveTo.suit == "H") {//black card
+        if ((cardToMove.suit == "S" || cardToMove.suit == "C") && (cardToMoveTo.suit == "D" || cardToMoveTo.suit == "H")) {//black card
             colorMoveValid = true
-        } else if (cardToMove.suit == "D" || cardToMove.suit == "H" && cardToMoveTo.suit == "S" || cardToMoveTo.suit == "C") { //red card
+        }
+        else if ((cardToMove.suit == "D" || cardToMove.suit == "H") && (cardToMoveTo.suit == "S" || cardToMoveTo.suit == "C")) { //red card
             colorMoveValid = true
         }
 
@@ -91,7 +92,10 @@ class SolitaireSolver {
             rankMoveValid = true
         }
 
-        return colorMoveValid && rankMoveValid
+        if (colorMoveValid && rankMoveValid){
+            return true
+        }
+        return false
     }
 
     fun isValidMoveTopColumn(cardToMove: Card, cardToMoveTo: Card): Boolean {

@@ -27,5 +27,8 @@ class ExampleUnitTest {
                 println("solution!: " + solution[0]!!.rank + solution[0]!!.suit + ", an empty column")
             }
         }
+        else{
+            println("no solution found!" )
+        }
     }
 }

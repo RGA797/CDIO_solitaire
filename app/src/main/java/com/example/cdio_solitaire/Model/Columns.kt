@@ -3,10 +3,10 @@ package com.example.cdio_solitaire.Model
 class Columns() {
 
         private val bottom_column1: List<Card> = listOf(Card(5, "H", false), Card(1, "H", true))
-        private val bottom_column2: List<Card> = listOf(Card(2, "H", false))
-        private val bottom_column3: List<Card> = listOf(Card(2, "C", false))
+        private val bottom_column2: List<Card> = listOf(Card(6, "H", false))
+        private val bottom_column3: List<Card> = listOf(Card(9, "C", false))
         private val bottom_column4: List<Card> = listOf(Card(3, "C", false))
-        private val bottom_column5: List<Card> = listOf(Card(10, "S", false))
+        private val bottom_column5: List<Card> = listOf(Card(7, "S", false))
         private val bottom_column6: List<Card> = listOf(Card(11, "D", false))
         private val bottom_column7: List<Card> = listOf(Card(13, "D", false))
 
