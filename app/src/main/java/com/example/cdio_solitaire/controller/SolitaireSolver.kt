@@ -39,22 +39,54 @@ class SolitaireSolver {
         var downTurnedCards = 0
         var tempNumberColumnWithMostDownTurnedCards = 0
         var columnWithMostDownTurnedCards = 0
+        var columnsWithMostDownTurnedCardsList: List<Int> = listOf()
         for (i in 0..6) {
             for (j in columns.bottomList[i]){
                 if (j.isDowncard){
                     downTurnedCards++
                 }
             }
-            if (downTurnedCards > tempNumberColumnWithMostDownTurnedCards){
+            if (downTurnedCards > tempNumberColumnWithMostDownTurnedCards && isValidMove(1, card, card)){
                 tempNumberColumnWithMostDownTurnedCards = downTurnedCards
                 columnWithMostDownTurnedCards = i
+                columnsWithMostDownTurnedCardsList += columnWithMostDownTurnedCards
             }
             downTurnedCards = 0; //reset
+
+            //loop all values in list starting from highest downturned pile to determine best move
+            columnsWithMostDownTurnedCardsList.forEach{
+                //isValidMoveColumnbased(it)
+                if (isValidMoveColumnbased(it)) {return it.toString()}
+            }
+
+
+
         }
         return "index: " + downTurnedCards.toString() + " has the most downturned cards"
 
     }
 
+    /**
+     * Function to check if the move of a pile is valid
+     */
+    private fun isValidMovePile(){
+
+
+    }
+
+
+    /**
+     * Function to check if the move is valid from the input of columns rather than all cards
+     */
+    private fun isValidMoveColumnbased(ColumnNumber: Int/*columns: Columns*/): Boolean {
+
+
+
+        return true
+    }
+
+    //Requirements:
+    // Move cards (plural) from one column to another ONLY IF it makes a downturned card to be face up or that the column gets more streamline
     fun ruleFour_ColumnToColumn(): String{
 
         return "something"
