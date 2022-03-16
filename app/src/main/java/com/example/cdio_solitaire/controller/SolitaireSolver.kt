@@ -7,7 +7,7 @@ import org.json.JSONObject.NULL
 class SolitaireSolver {
     val columns = Columns()
 
-    fun solve(): List<Card>? {
+    fun solve(): List<Card?>? {
 
         //kan vi bruge rule 1?
         var solution = ruleOne()
@@ -23,7 +23,7 @@ class SolitaireSolver {
     }
 
     //returns a move that involves ace or two
-    fun ruleOne():  List<Card>? {
+    fun ruleOne(): List<Card?>? {
         val validColumns = columns.getColumnsWithAceOrTwo()
         if (validColumns.isNotEmpty()){
             for (i in validColumns){
@@ -37,7 +37,7 @@ class SolitaireSolver {
     }
 
     //returns a move that can free up another card
-    fun ruleTwo(): List<Card>? {
+    fun ruleTwo(): List<Card?>? {
         val validColumns = columns.getBottomColumnsIndexesWithBackrow()
         if (validColumns.isNotEmpty()){
             for (i in validColumns){
@@ -57,11 +57,17 @@ class SolitaireSolver {
     //returns the first found set of cards that can be moved to, otherwise null.
     //first index: from
     //second index: to
-    fun getViableMove(card: Card): List<Card>? {
+    //null in return list means an empty column
+    fun getViableMove(card: Card): List<Card?>? {
         val bottomColumn = columns.getBottomList()
         for (i in bottomColumn){
-            if (i[0] == card || i.isEmpty()){
+            if (i[0] == card){
                 continue
+            }
+            else if (i.isEmpty()){
+                if (card.rank == 13){
+                    return listOf(card,null)
+                }
             }
             else if (isValidMove(card,i[0])){
                 return listOf(card, i[0])
