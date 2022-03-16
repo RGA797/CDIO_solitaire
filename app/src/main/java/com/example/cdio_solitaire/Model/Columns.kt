@@ -2,8 +2,8 @@ package com.example.cdio_solitaire.Model
 
 class Columns() {
 
-        private val bottom_column1: List<Card> = listOf(Card(5, "H", false), Card(1, "H", true))
-        private val bottom_column2: List<Card> = listOf(Card(6, "H", false))
+        private val bottom_column1: List<Card> = listOf(Card(6, "H", false), Card(1, "H", true))
+        private val bottom_column2: List<Card> = listOf(Card(5, "H", false))
         private val bottom_column3: List<Card> = listOf(Card(9, "C", false))
         private val bottom_column4: List<Card> = listOf(Card(3, "C", false))
         private val bottom_column5: List<Card> = listOf(Card(7, "S", false))
