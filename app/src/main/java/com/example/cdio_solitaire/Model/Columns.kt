@@ -1,5 +1,10 @@
 package com.example.cdio_solitaire.Model
 
+import android.R.array
+
+
+
+
 class Columns() {
 
         private val bottom_column1: List<Card> = listOf(Card(6, "H", false), Card(1, "H", true))
@@ -20,11 +25,11 @@ class Columns() {
 
 
 
-        fun getBottomList(): List<List<Card>> {
+        public fun getBottomList(): List<List<Card>> {
                 return bottomList
         }
 
-        fun columnHasBackrow(column_index: Int): Boolean {
+        public fun columnHasBackrow(column_index: Int): Boolean {
                 for (j in bottomList[column_index]) {
                         if (j.isDowncard){
                                 return true
@@ -33,7 +38,26 @@ class Columns() {
                 return false
         }
 
-        fun getCardIndexOfFirstUpcard(column_index: Int): Int {
+        //returns true if rule Five would not be violated given moving a card
+        public fun ruleFive(card: Card, cardIndex: Int): Boolean{
+                for (j in bottomList) {
+                        if (j[0].rank == 13){
+                                return true
+                        }
+                        else if (j[cardIndex].rank == card.rank && j[cardIndex].rank == card.rank) {
+                                try {
+                                        if (j[cardIndex+1].rank == 13){
+                                                return true
+                                        }
+                                } catch (exception: ArrayIndexOutOfBoundsException) {
+                                        return false
+                                }
+                        }
+                }
+                return false
+        }
+
+        public fun getCardIndexOfFirstUpcard(column_index: Int): Int {
                 var cardIndex = 0
                 for (j in bottomList[column_index]) {
                         if (!j.isDowncard) {
@@ -44,7 +68,7 @@ class Columns() {
                 return cardIndex
         }
 
-        fun getColumnsWithAceOrTwo(): MutableList<Int> {
+        public fun getColumnsWithAceOrTwo(): MutableList<Int> {
                 val viableIndexes = mutableListOf<Int>()
                 for (i in 0..6) {
                         for (j in bottomList[i]) {
@@ -62,7 +86,7 @@ class Columns() {
                         return viableIndexes
         }
 
-        fun getLongestBottomColumnsIndexes(): MutableList<Int> {
+        public fun getLongestBottomColumnsIndexes(): MutableList<Int> {
                 var longest_backrow_size = 0
                 var longest_column_indexes = mutableListOf<Int>()
                 for (collumn_index in 0..6) {
@@ -84,7 +108,7 @@ class Columns() {
                 return  longest_column_indexes
 
         }
-        fun getBottomColumnsIndexesWithBackrow(): MutableList<Int> {
+        public fun getBottomColumnsIndexesWithBackrow(): MutableList<Int> {
                 var validIndexes = mutableListOf<Int>()
                 for (collumn_index in 0..6) {
                         for (card in bottomList[collumn_index]) {
@@ -97,7 +121,7 @@ class Columns() {
                 return  validIndexes
         }
 
-        fun getCardIndexOfAceOrTwo(column_index: Int): Int{
+        public fun getCardIndexOfAceOrTwo(column_index: Int): Int{
                 var cardIndex = 0
                 for (j in bottomList[column_index]) {
                         if (j.rank == 1 || j.rank == 2){
