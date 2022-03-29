@@ -78,8 +78,8 @@ class SolitaireSolver {
 
 
     private fun isValidMove(cardToMove: Card, cardToMoveTo: Card): Boolean {
-        var colorMoveValid: Boolean = false
-        var rankMoveValid: Boolean = false
+        var colorMoveValid = false
+        var rankMoveValid= false
 
         if ((cardToMove.suit == "S" || cardToMove.suit == "C") && (cardToMoveTo.suit == "D" || cardToMoveTo.suit == "H")) {//black card
             colorMoveValid = true
@@ -116,6 +116,4 @@ class SolitaireSolver {
 
         return suitMoveValid && rankMoveValid
     }
-
-
 }
