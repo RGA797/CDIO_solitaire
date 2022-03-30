@@ -42,26 +42,6 @@ class Columns() {
                 return false
         }
 
-        //returns true if rule Five would not be violated given moving a card
-        public fun ruleFive(card: Card, cardIndex: Int): Boolean{
-                for (j in bottomList) {
-                        if (j[0].rank == 13){
-                                return true
-                        }
-                        else if (j[cardIndex].rank == card.rank && j[cardIndex].rank == card.rank) {
-                                try {
-                                        if (j[cardIndex+1].rank == 13){
-                                                return true
-                                        }
-                                } catch (exception: ArrayIndexOutOfBoundsException) {
-                                        return false
-                                }
-                        }
-                }
-                return false
-        }
-
-
         public fun getCardIndexOfFirstUpcard(column_index: Int): Int {
                 var cardIndex = 0
                 for (j in bottomList[column_index]) {

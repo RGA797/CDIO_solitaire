@@ -50,6 +50,26 @@ class SolitaireSolver {
         return null
     }
 
+    //returns true if rule Five would not be violated given moving a card
+    private fun ruleFive(card: Card, cardIndex: Int): Boolean{
+        val bottomList = columns.getBottomList()
+        for (j in bottomList) {
+            if (j[0].rank == 13){
+                return true
+            }
+            else if (j[cardIndex].rank == card.rank && j[cardIndex].rank == card.rank) {
+                try {
+                    if (j[cardIndex+1].rank == 13){
+                        return true
+                    }
+                } catch (exception: ArrayIndexOutOfBoundsException) {
+                    return false
+                }
+            }
+        }
+        return false
+    }
+
     fun ruleSix(): List<Card>? {
         return null
     }
