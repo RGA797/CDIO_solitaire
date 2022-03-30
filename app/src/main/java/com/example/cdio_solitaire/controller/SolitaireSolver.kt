@@ -27,7 +27,7 @@ class SolitaireSolver {
         val validColumnsIndexes = columns.getColumnsIndexesWithAceOrTwo()
         if (validColumnsIndexes.isNotEmpty()) {
             for (i in validColumnsIndexes) {
-                val viableMove = getViableMove(columns.getBottomList()[i][columns.getCardIndexOfAceOrTwo(i)])
+                val viableMove = getViableMove(columns.getBottomList()[i][columns.getCardIndexOfAceOrTwo(i)],false)
                 if (viableMove != null) {
                     return (viableMove)
                 }
@@ -41,7 +41,7 @@ class SolitaireSolver {
         val validColumns = columns.getBottomColumnsIndexesWithBackrow()
         if (validColumns.isNotEmpty()) {
             for (i in validColumns) {
-                val viableMove = getViableMove(columns.getBottomList()[i][columns.getCardIndexOfFirstUpcard(i)])
+                val viableMove = getViableMove(columns.getBottomList()[i][columns.getCardIndexOfFirstUpcard(i)],false)
                 if (viableMove != null) {
                     return viableMove
                 }
