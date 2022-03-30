@@ -50,21 +50,34 @@ class SolitaireSolver {
         return null
     }
 
-    //returns true if rule Five would not be violated given moving a card
-    private fun ruleFive(card: Card, cardIndex: Int): Boolean{
+    //returns true if there is a king waiting to take a spot after moving a card
+    //note: the function assumes that a solution exists
+    private fun ruleFive(card: Card): Boolean{
         val bottomList = columns.getBottomList()
-        for (j in bottomList) {
-            if (j[0].rank == 13){
-                return true
-            }
-            else if (j[cardIndex].rank == card.rank && j[cardIndex].rank == card.rank) {
-                try {
-                    if (j[cardIndex+1].rank == 13){
-                        return true
+        var kingWaiting = false
+        var emptySpot = false
+        var cardFound = false
+        for (i in bottomList) {
+            if (i.isNotEmpty()) {
+                if (!cardFound) {
+                    var index = 0
+                    for (j in i) {
+                        if (j.rank == card.rank && i[0].suit == card.suit) {
+                            if (i.size - index == 1) {
+                                emptySpot = true
+                            }
+                            cardFound = true
+                            break
+                        }
+                        index++
                     }
-                } catch (exception: ArrayIndexOutOfBoundsException) {
-                    return false
                 }
+            }
+            if (i[0].rank == 13) {
+                kingWaiting = true
+            }
+            if (kingWaiting && emptySpot){
+                return true
             }
         }
         return false
@@ -78,36 +91,50 @@ class SolitaireSolver {
     //first index: from
     //second index: to
     //null in return list means an empty column
-    private fun getViableMove(card: Card): List<Card?>? {
+    private fun getViableMove(card: Card, ruleFive: Boolean): List<Card?>? {
         val bottomColumns = columns.getBottomList()
         val topColumns = columns.getTopList()
+        var solution: List<Card?>? = null
+
+        //solution moving to bottom card
         for (i in bottomColumns) {
             if (i.isEmpty()) {
                 if (isValidMove(card, null, true)) {
-                    return listOf(card, null)
+                    solution =  listOf(card, null)
                 }
             }
             else if (i[0].rank == card.rank && i[0].suit == card.suit) {
                 continue
             }
             else if (isValidMove(card, i[0], true)) {
-                return listOf(card, i[0])
+                solution = listOf(card, i[0])
             }
         }
 
+        //solution moving to top card
         for (j in topColumns) {
             if (j.isEmpty()) {
                 if (isValidMove(card, null, false)) {
-                    return listOf(card, null)
+                    solution = listOf(card, null)
                 }
             }
             else if (j[0].rank == card.rank && j[0].suit == card.suit) {
                 continue
             } else if (isValidMove(card, j[0], false)) {
-                return listOf(card, j[0])
+                solution = listOf(card, j[0])
             }
         }
-        return null
+
+        //aditional check given optional rules
+        if (ruleFive){
+            if (solution != null){
+                if (!ruleFive(solution[0]!!)){
+                    solution = null
+                }
+            }
+        }
+
+        return solution
     }
 
     private fun isValidMove(cardToMove: Card, cardToMoveTo: Card?, bottomRules: Boolean): Boolean {
