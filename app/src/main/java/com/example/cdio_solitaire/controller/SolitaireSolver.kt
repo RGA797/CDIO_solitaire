@@ -5,7 +5,7 @@ import com.example.cdio_solitaire.Model.Columns
 import org.json.JSONObject.NULL
 
 class SolitaireSolver {
-    val columns = Columns()
+    private val columns = Columns()
 
     public fun solve(): List<Card?>? {
 
@@ -41,8 +41,7 @@ class SolitaireSolver {
         val validColumns = columns.getBottomColumnsIndexesWithBackrow()
         if (validColumns.isNotEmpty()) {
             for (i in validColumns) {
-                val viableMove =
-                    getViableMove(columns.getBottomList()[i][columns.getCardIndexOfFirstUpcard(i)])
+                val viableMove = getViableMove(columns.getBottomList()[i][columns.getCardIndexOfFirstUpcard(i)])
                 if (viableMove != null) {
                     return viableMove
                 }
@@ -63,13 +62,15 @@ class SolitaireSolver {
         val bottomColumns = columns.getBottomList()
         val topColumns = columns.getTopList()
         for (i in bottomColumns) {
-            if (i[0] == card) {
-                continue
-            } else if (i.isEmpty()) {
+            if (i.isEmpty()) {
                 if (isValidMove(card, null, true)) {
                     return listOf(card, null)
                 }
-            } else if (isValidMove(card, i[0], true)) {
+            }
+            else if (i[0].rank == card.rank && i[0].suit == card.suit) {
+                continue
+            }
+            else if (isValidMove(card, i[0], true)) {
                 return listOf(card, i[0])
             }
         }
