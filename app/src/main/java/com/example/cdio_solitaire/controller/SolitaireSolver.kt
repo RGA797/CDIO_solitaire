@@ -8,7 +8,6 @@ class SolitaireSolver {
     private val columns = Columns()
 
     public fun solve(): List<Card?>? {
-
         //kan vi bruge rule 1?
         var solution = ruleOne()
         if (ruleOne() != null) {
