@@ -7,10 +7,10 @@ import android.R.array
 
 class Columns() {
 
-        private val bottom_column1: List<Card> = listOf(Card(6, "H", false), Card(1, "H", true))
-        private val bottom_column2: List<Card> = listOf()
-        private val bottom_column3: List<Card> = listOf(Card(9, "H", false))
-        private val bottom_column4: List<Card> = listOf()
+        private val bottom_column1: List<Card> = listOf(Card(6, "S", false))
+        private val bottom_column2: List<Card> = listOf(Card(9, "H", false))
+        private val bottom_column3: List<Card> = listOf(Card(4, "H", false))
+        private val bottom_column4: List<Card> = listOf(Card(3, "H", false))
         private val bottom_column5: List<Card> = listOf(Card(7, "H", false))
         private val bottom_column6: List<Card> = listOf(Card(11, "H", false))
         private val bottom_column7: List<Card> = listOf(Card(13, "H", false), Card(8, "S", true))

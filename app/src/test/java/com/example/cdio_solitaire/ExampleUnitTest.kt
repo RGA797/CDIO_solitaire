@@ -1,5 +1,6 @@
 package com.example.cdio_solitaire
 
+import com.example.cdio_solitaire.Model.Card
 import com.example.cdio_solitaire.controller.SolitaireSolver
 import org.junit.Test
 
@@ -29,6 +30,17 @@ class ExampleUnitTest {
         }
         else{
             println("no solution found!" )
+        }
+    }
+
+    @Test
+    fun rule_five(){
+        val solitaireSolver = SolitaireSolver()
+        if (solitaireSolver.ruleFive(Card(6, "S", false))){
+            println("solution found!" )
+        }
+        else{
+            println("no solution found")
         }
     }
 }

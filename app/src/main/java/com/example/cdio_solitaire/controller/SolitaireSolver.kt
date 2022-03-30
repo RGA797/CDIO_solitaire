@@ -51,7 +51,7 @@ class SolitaireSolver {
 
     //returns true if there is a king waiting to take a spot after moving a card
     //note: the function assumes that a solution exists
-    private fun ruleFive(card: Card): Boolean{
+    public fun ruleFive(card: Card): Boolean{
         val bottomList = columns.getBottomList()
         var kingWaiting = false
         var emptySpot = false
