@@ -29,6 +29,10 @@ class Columns() {
                 return bottomList
         }
 
+        public fun getTopList(): List<List<Card>> {
+                return topList
+        }
+
         public fun columnHasBackrow(column_index: Int): Boolean {
                 for (j in bottomList[column_index]) {
                         if (j.isDowncard){
@@ -57,6 +61,7 @@ class Columns() {
                 return false
         }
 
+
         public fun getCardIndexOfFirstUpcard(column_index: Int): Int {
                 var cardIndex = 0
                 for (j in bottomList[column_index]) {
@@ -68,7 +73,7 @@ class Columns() {
                 return cardIndex
         }
 
-        public fun getColumnsWithAceOrTwo(): MutableList<Int> {
+        public fun getColumnsIndexesWithAceOrTwo(): MutableList<Int> {
                 val viableIndexes = mutableListOf<Int>()
                 for (i in 0..6) {
                         for (j in bottomList[i]) {
@@ -108,6 +113,7 @@ class Columns() {
                 return  longest_column_indexes
 
         }
+
         public fun getBottomColumnsIndexesWithBackrow(): MutableList<Int> {
                 var validIndexes = mutableListOf<Int>()
                 for (collumn_index in 0..6) {

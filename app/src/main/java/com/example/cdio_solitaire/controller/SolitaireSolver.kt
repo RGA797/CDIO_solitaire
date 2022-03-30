@@ -11,24 +11,24 @@ class SolitaireSolver {
 
         //kan vi bruge rule 1?
         var solution = ruleOne()
-        if (ruleOne() != null){
+        if (ruleOne() != null) {
             return solution
         }
         //kan vi bruge rule 2?
         solution = ruleTwo()
-        if (ruleTwo() != null ){
-            return  solution
+        if (ruleTwo() != null) {
+            return solution
         }
         return null
     }
 
     //returns a move that involves ace or two
     private fun ruleOne(): List<Card?>? {
-        val validColumns = columns.getColumnsWithAceOrTwo()
-        if (validColumns.isNotEmpty()){
-            for (i in validColumns){
+        val validColumnsIndexes = columns.getColumnsIndexesWithAceOrTwo()
+        if (validColumnsIndexes.isNotEmpty()) {
+            for (i in validColumnsIndexes) {
                 val viableMove = getViableMove(columns.getBottomList()[i][columns.getCardIndexOfAceOrTwo(i)])
-                if (viableMove != null){
+                if (viableMove != null) {
                     return (viableMove)
                 }
             }
@@ -39,10 +39,11 @@ class SolitaireSolver {
     //returns a move that can free up another card
     private fun ruleTwo(): List<Card?>? {
         val validColumns = columns.getBottomColumnsIndexesWithBackrow()
-        if (validColumns.isNotEmpty()){
-            for (i in validColumns){
-                val viableMove = getViableMove(columns.getBottomList()[i][columns.getCardIndexOfFirstUpcard(i)])
-                if (viableMove != null){
+        if (validColumns.isNotEmpty()) {
+            for (i in validColumns) {
+                val viableMove =
+                    getViableMove(columns.getBottomList()[i][columns.getCardIndexOfFirstUpcard(i)])
+                if (viableMove != null) {
                     return viableMove
                 }
             }
@@ -59,61 +60,77 @@ class SolitaireSolver {
     //second index: to
     //null in return list means an empty column
     private fun getViableMove(card: Card): List<Card?>? {
-        val bottomColumn = columns.getBottomList()
-        for (i in bottomColumn){
-            if (i[0] == card){
+        val bottomColumns = columns.getBottomList()
+        val topColumns = columns.getTopList()
+        for (i in bottomColumns) {
+            if (i[0] == card) {
                 continue
-            }
-            else if (i.isEmpty()){
-                if (card.rank == 13){
-                    return listOf(card,null)
+            } else if (i.isEmpty()) {
+                if (isValidMove(card, null, true)) {
+                    return listOf(card, null)
                 }
-            }
-            else if (isValidMove(card,i[0])){
+            } else if (isValidMove(card, i[0], true)) {
                 return listOf(card, i[0])
+            }
+        }
+
+        for (j in topColumns) {
+            if (j[0].rank == card.rank && j[0].suit == card.suit) {
+                continue
+            } else if (j.isEmpty()) {
+                if (isValidMove(card, null, false)) {
+                    return listOf(card, null)
+                }
+            } else if (isValidMove(card, j[0], false)) {
+                return listOf(card, j[0])
             }
         }
         return null
     }
 
+    private fun isValidMove(cardToMove: Card, cardToMoveTo: Card?, bottomRules: Boolean): Boolean {
+        var suitMoveValid = false
+        var rankMoveValid = false
 
-    private fun isValidMove(cardToMove: Card, cardToMoveTo: Card): Boolean {
-        var colorMoveValid = false
-        var rankMoveValid= false
+        if (bottomRules) {
+            if (cardToMoveTo == null && cardToMove.rank == 13) {
+                return true
+            }
+            if (cardToMoveTo != null) {
+                if ((cardToMove.suit == "S" || cardToMove.suit == "C") && (cardToMoveTo.suit == "D" || cardToMoveTo.suit == "H")) {//black card
+                    suitMoveValid = true
+                } else if ((cardToMove.suit == "D" || cardToMove.suit == "H") && (cardToMoveTo.suit == "S" || cardToMoveTo.suit == "C")) { //red card
+                    suitMoveValid = true
+                }
 
-        if ((cardToMove.suit == "S" || cardToMove.suit == "C") && (cardToMoveTo.suit == "D" || cardToMoveTo.suit == "H")) {//black card
-            colorMoveValid = true
+                if (cardToMove.rank + 1 == cardToMoveTo.rank) { //Rank move valid
+                    rankMoveValid = true
+                }
+
+                if (suitMoveValid && rankMoveValid) {
+                    return true
+                }
+            }
         }
-        else if ((cardToMove.suit == "D" || cardToMove.suit == "H") && (cardToMoveTo.suit == "S" || cardToMoveTo.suit == "C")) { //red card
-            colorMoveValid = true
-        }
 
-        if (cardToMove.rank + 1 == cardToMoveTo.rank) { //Rank move valid
-            rankMoveValid = true
-        }
+        else if (!bottomRules) {
+            if (cardToMoveTo == null && cardToMove.rank == 1) {
+                return true
+            }
+            if (cardToMoveTo != null) {
+                if (cardToMove.suit == cardToMoveTo.suit) {
+                    suitMoveValid = true
+                }
 
-        if (colorMoveValid && rankMoveValid){
-            return true
+                if (cardToMove.rank - 1 == cardToMoveTo.rank) { //Rank move valid
+                    rankMoveValid = true
+                }
+
+                if (suitMoveValid && rankMoveValid) {
+                    return true
+                }
+            }
         }
         return false
-    }
-
-    fun isValidMoveTopColumn(cardToMove: Card, cardToMoveTo: Card): Boolean {
-        var suitMoveValid: Boolean = false
-        var rankMoveValid: Boolean = false
-
-        if (cardToMove.suit == cardToMoveTo.suit || (cardToMove.rank == 1 && cardToMoveTo.suit == NULL)) {
-            suitMoveValid = true
-        }
-
-        if (cardToMove.rank - 1 == cardToMoveTo.rank) { //Rank move valid
-            rankMoveValid = true
-        }
-
-        if (cardToMove.rank == 1 && cardToMoveTo.rank == NULL) {
-            rankMoveValid = true
-        }
-
-        return suitMoveValid && rankMoveValid
     }
 }
