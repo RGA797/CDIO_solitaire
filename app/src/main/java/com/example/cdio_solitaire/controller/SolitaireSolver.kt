@@ -75,12 +75,13 @@ class SolitaireSolver {
         }
 
         for (j in topColumns) {
-            if (j[0].rank == card.rank && j[0].suit == card.suit) {
-                continue
-            } else if (j.isEmpty()) {
+            if (j.isEmpty()) {
                 if (isValidMove(card, null, false)) {
                     return listOf(card, null)
                 }
+            }
+            else if (j[0].rank == card.rank && j[0].suit == card.suit) {
+                continue
             } else if (isValidMove(card, j[0], false)) {
                 return listOf(card, j[0])
             }
