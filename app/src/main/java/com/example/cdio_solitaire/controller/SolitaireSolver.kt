@@ -9,18 +9,47 @@ class SolitaireSolver {
     public fun solve(): List<Card?>? {
         //kan vi bruge rule 1?
         var solution = ruleOne()
-        if (ruleOne() != null) {
+        if (solution != null) {
             return solution
         }
         //kan vi bruge rule 2?
         solution = ruleTwo()
-        if (ruleTwo() != null) {
+        if (solution != null) {
             return solution
         }
-        return null
 
-        //kan vi rykke noget givet algoritmens conditionelle regler
+        solution = generalSolution()
+        if (solution != null) {
+            return solution
+        }
+
+        return solution
+
     }
+
+    //returns a move that involves ace or two
+    private fun generalSolution(): List<Card?>? {
+        val bottomList = columns.getBottomList()
+        if (bottomList.isNotEmpty()) {
+            for (i in bottomList) {
+                for (j in i){
+                    if (!j.isDowncard) {
+                        val viableMove = getViableMove(
+                            j,
+                            useRuleFour = true,
+                            useRuleFive = true,
+                            useRuleSix = true
+                        )
+                        if (viableMove != null) {
+                            return (viableMove)
+                        }
+                    }
+                }
+            }
+        }
+        return null
+    }
+
 
     //returns a move that involves ace or two
     private fun ruleOne(): List<Card?>? {
@@ -83,16 +112,17 @@ class SolitaireSolver {
 
     //function returns true if rule four has not been violated, given a solution
     private fun ruleFour(solution: List<Card?>): Boolean {
-        if (columns.columnHasBackrow(columns.getColumnsIndexesOfCard(solution[0]!!)!!)) {
+        if (columns.columnHasBackrow(columns.getColumnsIndexOfCard(solution[0]!!)!!)) {
             return true
         }
-        val firstColumnSize = columns.getColumnSize(columns.getColumnsIndexesOfCard(solution[1]!!)!!)
+        val firstColumnSize = columns.getColumnSize(columns.getColumnsIndexOfCard(solution[1]!!)!!)
         var secondColumnSize = 0
         if (solution[1] != null){
-            secondColumnSize = columns.getColumnSize(columns.getColumnsIndexesOfCard(solution[1]!!)!!)
+            secondColumnSize = columns.getColumnSize(columns.getColumnsIndexOfCard(solution[1]!!)!!)
         }
+
         val difference = firstColumnSize- secondColumnSize
-        if (difference != 1 && difference != -1) {
+        if (difference != 1 && difference != -1 && difference == 0) {
             return true
         }
         return false
@@ -132,8 +162,14 @@ class SolitaireSolver {
     }
 
     fun ruleSix(card: Card): Boolean {
-        return true
+        if (card.rank != 13) {
+            return false
         }
+        if (columns.getNumberOfDowncardsForCard(card) == columns.getBiggestNumberOfDowncards()){
+            return true
+        }
+        return false
+    }
     //returns the first found set of cards that can be moved to, otherwise null.
     //first index: from
     //second index: to

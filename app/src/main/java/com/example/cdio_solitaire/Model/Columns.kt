@@ -111,7 +111,7 @@ class Columns() {
                 return bottomList[collumnIndex].size
         }
 
-        fun getColumnsIndexesOfCard(card: Card): Int?{
+        fun getColumnsIndexOfCard(card: Card): Int?{
                 for (i in 0..6) {
                         for (j in bottomList[i]) {
                                 if (j.rank == card.rank && j.suit == card.suit){
@@ -148,5 +148,22 @@ class Columns() {
                         }
                 }
                 return downcards
+        }
+        fun getBiggestNumberOfDowncards(): Int{
+                var biggestNumber = 0
+                for (i in bottomList){
+                        var localNumberOfDowncards = 0
+                        if (i.isNotEmpty()) {
+                                for (j in i){
+                                        if (j.isDowncard){
+                                                localNumberOfDowncards++
+                                        }
+                                }
+                                if (localNumberOfDowncards > biggestNumber){
+                                        biggestNumber = localNumberOfDowncards
+                                }
+                        }
+                }
+                return biggestNumber
         }
 }
