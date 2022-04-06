@@ -2,7 +2,6 @@ package com.example.cdio_solitaire.controller
 
 import com.example.cdio_solitaire.Model.Card
 import com.example.cdio_solitaire.Model.Columns
-import org.json.JSONObject.NULL
 
 class SolitaireSolver {
     private val columns = Columns()
@@ -19,6 +18,8 @@ class SolitaireSolver {
             return solution
         }
         return null
+
+        //kan vi rykke noget givet algoritmens conditionelle regler
     }
 
     //returns a move that involves ace or two
@@ -26,7 +27,7 @@ class SolitaireSolver {
         val validColumnsIndexes = columns.getColumnsIndexesWithAceOrTwo()
         if (validColumnsIndexes.isNotEmpty()) {
             for (i in validColumnsIndexes) {
-                val viableMove = getViableMove(columns.getBottomList()[i][columns.getCardIndexOfAceOrTwo(i)],false)
+                val viableMove = getViableMove(columns.getBottomList()[i][columns.getCardIndexOfAceOrTwoUpcard(i)],false, false, false)
                 if (viableMove != null) {
                     return (viableMove)
                 }
@@ -38,20 +39,68 @@ class SolitaireSolver {
     //returns a move that can free up another card
     private fun ruleTwo(): List<Card?>? {
         val validColumns = columns.getBottomColumnsIndexesWithBackrow()
+        val viableMoves: MutableList<List<Card?>> = ArrayList()
         if (validColumns.isNotEmpty()) {
             for (i in validColumns) {
-                val viableMove = getViableMove(columns.getBottomList()[i][columns.getCardIndexOfFirstUpcard(i)],false)
+                val viableMove = getViableMove(columns.getBottomList()[i][columns.getCardIndexOfFirstUpcard(i)],false, false, false)
                 if (viableMove != null) {
-                    return viableMove
+                    viableMoves.add(viableMove)
                 }
+            }
+            if (viableMoves.isEmpty()){
+                return null
+            }
+            else if (viableMoves.size == 1){
+                return viableMoves[0]
+            }
+            else {
+                return ruleThree(viableMoves)
             }
         }
         return null
     }
 
+    //given a list of solutions, ruleThree returns the one which involves the collumn with biggest number
+    //of downcards
+    private fun ruleThree(viableMoves: MutableList<List<Card?>>): List<Card?>? {
+        var biggestNumberOfDowncards: Int? = null
+        var currentSolution: List<Card?>? = null
+        for (i in viableMoves){
+            if (i[0] != null) {
+                val downcards = columns.getNumberOfDowncardsForCard(i[0]!!)
+                if (biggestNumberOfDowncards == null && currentSolution == null) {
+                    biggestNumberOfDowncards = downcards
+                    currentSolution = i
+                }
+                if (downcards > biggestNumberOfDowncards!!) {
+                    biggestNumberOfDowncards = downcards
+                    currentSolution = i
+                }
+            }
+        }
+        return currentSolution
+    }
+
+    //function returns true if rule four has not been violated, given a solution
+    private fun ruleFour(solution: List<Card?>): Boolean {
+        if (columns.columnHasBackrow(columns.getColumnsIndexesOfCard(solution[0]!!)!!)) {
+            return true
+        }
+        val firstColumnSize = columns.getColumnSize(columns.getColumnsIndexesOfCard(solution[1]!!)!!)
+        var secondColumnSize = 0
+        if (solution[1] != null){
+            secondColumnSize = columns.getColumnSize(columns.getColumnsIndexesOfCard(solution[1]!!)!!)
+        }
+        val difference = firstColumnSize- secondColumnSize
+        if (difference != 1 && difference != -1) {
+            return true
+        }
+        return false
+    }
+
     //returns true if there is a king waiting to take a spot after moving a card
     //note: the function assumes that a solution exists
-    public fun ruleFive(card: Card): Boolean{
+    fun ruleFive(card: Card): Boolean{
         val bottomList = columns.getBottomList()
         var kingWaiting = false
         var emptySpot = false
@@ -82,31 +131,35 @@ class SolitaireSolver {
         return false
     }
 
-    fun ruleSix(): List<Card>? {
-        return null
-    }
-
+    fun ruleSix(card: Card): Boolean {
+        return true
+        }
     //returns the first found set of cards that can be moved to, otherwise null.
     //first index: from
     //second index: to
     //null in return list means an empty column
-    private fun getViableMove(card: Card, ruleFive: Boolean): List<Card?>? {
+    private fun getViableMove(card: Card, useRuleFour: Boolean, useRuleFive: Boolean, useRuleSix: Boolean): List<Card?>? {
         val bottomColumns = columns.getBottomList()
         val topColumns = columns.getTopList()
         var solution: List<Card?>? = null
-
         //solution moving to bottom card
         for (i in bottomColumns) {
             if (i.isEmpty()) {
                 if (isValidMove(card, null, true)) {
-                    solution =  listOf(card, null)
+                    solution = listOf(card, null)
                 }
             }
             else if (i[0].rank == card.rank && i[0].suit == card.suit) {
                 continue
             }
+
             else if (isValidMove(card, i[0], true)) {
                 solution = listOf(card, i[0])
+                if (useRuleFour){
+                    if (!ruleFour(solution)){
+                        solution = null
+                    }
+                }
             }
         }
 
@@ -125,7 +178,7 @@ class SolitaireSolver {
         }
 
         //aditional check given optional rules
-        if (ruleFive){
+        if (useRuleFive){
             if (solution != null){
                 if (!ruleFive(solution[0]!!)){
                     solution = null
@@ -133,9 +186,18 @@ class SolitaireSolver {
             }
         }
 
+        //aditional check given optional rules
+        if (useRuleSix){
+            if (solution != null){
+                if (!ruleSix(solution[0]!!)){
+                    solution = null
+                }
+            }
+        }
         return solution
     }
 
+    //returns true if given a move that CAN be made ALSO doesnt violate the algorithms conditional rules
     private fun isValidMove(cardToMove: Card, cardToMoveTo: Card?, bottomRules: Boolean): Boolean {
         var suitMoveValid = false
         var rankMoveValid = false
@@ -169,11 +231,9 @@ class SolitaireSolver {
                 if (cardToMove.suit == cardToMoveTo.suit) {
                     suitMoveValid = true
                 }
-
                 if (cardToMove.rank - 1 == cardToMoveTo.rank) { //Rank move valid
                     rankMoveValid = true
                 }
-
                 if (suitMoveValid && rankMoveValid) {
                     return true
                 }

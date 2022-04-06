@@ -60,10 +60,10 @@ class Columns() {
                                 if (j.isDowncard) {
                                         continue
                                 }
-                                else if (j.rank == 1){
+                                else if (j.rank == 1 && !j.isDowncard){
                                         viableIndexes.add(i)
                                 }
-                                else if (j.rank == 2){
+                                else if (j.rank == 2 && !j.isDowncard){
                                         viableIndexes.add(i)
                                 }
                         }
@@ -107,14 +107,46 @@ class Columns() {
                 return  validIndexes
         }
 
-        public fun getCardIndexOfAceOrTwo(column_index: Int): Int{
+        fun getColumnSize(collumnIndex: Int): Int{
+                return bottomList[collumnIndex].size
+        }
+
+        fun getColumnsIndexesOfCard(card: Card): Int?{
+                for (i in 0..6) {
+                        for (j in bottomList[i]) {
+                                if (j.rank == card.rank && j.suit == card.suit){
+                                        return i
+                                }
+                        }
+                }
+                return null
+        }
+
+        //returns index of Ace or two upcard given a column specified by index
+        public fun getCardIndexOfAceOrTwoUpcard(column_index: Int): Int{
                 var cardIndex = 0
                 for (j in bottomList[column_index]) {
-                        if (j.rank == 1 || j.rank == 2){
+                        if (j.rank == 1 && !j.isDowncard || j.rank == 2 && !j.isDowncard){
                                 break
                         }
                         cardIndex++
                 }
                 return cardIndex
+        }
+        public fun getNumberOfDowncardsForCard(card: Card): Int {
+                var downcards = 0
+                for (i in 0..6) {
+                        for (j in bottomList[i]) {
+                                if (j.rank == card.rank && j.suit == card.suit){
+                                        for (x in bottomList[i]){
+                                                if (x.isDowncard){
+                                                        downcards++
+                                                }
+                                        }
+                                        return downcards
+                                }
+                        }
+                }
+                return downcards
         }
 }
