@@ -6,12 +6,31 @@ import com.example.cdio_solitaire.Model.Columns
 class SolitaireSolver {
     private val columns = Columns()
 
+    public fun addCards (list: List<Card>, columnIndex: Int){
+        columns.addToBottomList(list, columnIndex)
+    }
+
+    fun printList(){
+        for (i in columns.getBottomList()){
+            var string = "["
+            if (i.isNotEmpty()){
+                for (j in i){
+                    string = string + "{" + j.rank + ", " + j.suit + "}" + ","
+                }
+            }
+            string.dropLast(2)
+            string = "$string]"
+            println(string)
+        }
+    }
+
     public fun solve(): List<Card?>? {
         //kan vi bruge rule 1?
         var solution = ruleOne()
         if (solution != null) {
             return solution
         }
+
         //kan vi bruge rule 2?
         solution = ruleTwo()
         if (solution != null) {
@@ -24,7 +43,6 @@ class SolitaireSolver {
         }
 
         return solution
-
     }
 
     //returns a move that involves ace or two
@@ -49,7 +67,6 @@ class SolitaireSolver {
         }
         return null
     }
-
 
     //returns a move that involves ace or two
     private fun ruleOne(): List<Card?>? {
