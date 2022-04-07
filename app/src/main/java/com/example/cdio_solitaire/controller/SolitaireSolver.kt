@@ -108,7 +108,7 @@ class SolitaireSolver {
 
     //given a list of solutions, ruleThree returns the one which involves the collumn with biggest number
     //of downcards
-    private fun ruleThree(viableMoves: MutableList<List<Card?>>): List<Card?>? {
+    public fun ruleThree(viableMoves: MutableList<List<Card?>>): List<Card?>? {
         var biggestNumberOfDowncards: Int? = null
         var currentSolution: List<Card?>? = null
         for (i in viableMoves){
@@ -168,7 +168,7 @@ class SolitaireSolver {
                     }
                 }
             }
-            if (i[0].rank == 13) {
+            if (i[0].rank == 13 && i[0].suit != card.suit) {
                 kingWaiting = true
             }
             if (kingWaiting && emptySpot){
@@ -205,7 +205,7 @@ class SolitaireSolver {
             else if (i[0].rank == card.rank && i[0].suit == card.suit) {
                 continue
             }
-
+            
             else if (isValidMove(card, i[0], true)) {
                 solution = listOf(card, i[0])
                 if (useRuleFour){
