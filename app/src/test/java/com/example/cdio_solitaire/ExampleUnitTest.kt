@@ -120,7 +120,6 @@ class ExampleUnitTest {
 
         assertEquals(solitaireSolver.ruleFive(Card(9, "H", false)), true)
         assertEquals(solitaireSolver.ruleFive(Card(13, "H", false)), false)
-
     }
 
     @Test

@@ -154,22 +154,31 @@ class SolitaireSolver {
         var cardFound = false
         for (i in bottomList) {
             if (i.isNotEmpty()) {
-                if (!cardFound) {
+                if (!cardFound || !kingWaiting) {
                     var index = 0
                     for (j in i) {
-                        if (j.rank == card.rank && i[0].suit == card.suit) {
+                        if (j.rank == card.rank && j.suit == card.suit) {
                             if (i.size - index == 1) {
                                 emptySpot = true
                             }
                             cardFound = true
+                        }
+
+                        if (j.rank == 13 && !j.isDowncard) {
+                            if (j.rank == card.rank && j.suit == card.suit){
+                                continue
+                            }
+                            else{
+                                kingWaiting = true
+                            }
+                        }
+
+                        if (cardFound && kingWaiting){
                             break
                         }
                         index++
                     }
                 }
-            }
-            if (i[0].rank == 13 && i[0].suit != card.suit) {
-                kingWaiting = true
             }
             if (kingWaiting && emptySpot){
                 return true
