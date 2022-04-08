@@ -184,6 +184,9 @@ class SolitaireSolver {
                 return true
             }
         }
+        if (cardFound && !emptySpot){
+            return true
+        }
         return false
     }
 
@@ -257,10 +260,13 @@ class SolitaireSolver {
 
         //aditional check given optional rules
         if (useRuleSix){
-            for (i in bottomSolutions.indices)
-            if (bottomSolutions[i] != null){
-                if (!ruleSix(bottomSolutions[i]?.get(0)!!)){
-                    bottomSolutions[i] = null
+            for (i in bottomSolutions.indices) {
+                if (bottomSolutions[i] != null) {
+                    if (bottomSolutions[i]?.get(0)?.rank == 13) {
+                        if (!ruleSix(bottomSolutions[i]?.get(0)!!)) {
+                            bottomSolutions[i] = null
+                        }
+                    }
                 }
             }
         }
