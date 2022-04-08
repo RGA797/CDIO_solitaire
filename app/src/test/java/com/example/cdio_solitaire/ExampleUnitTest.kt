@@ -88,10 +88,10 @@ class ExampleUnitTest {
         solitaireSolver.addCards(bottom_column6, 5)
         solitaireSolver.addCards(bottom_column7, 6)
 
-        val solution1: List<Card?> = listOf(Card(6, "S", false),Card(7, "H", false))
-        val solution2: List<Card?> =  listOf(Card(2, "S", false),null)
+        val solution1: MutableList<Card?> = mutableListOf(Card(6, "S", false),Card(7, "H", false))
+        val solution2: MutableList<Card?> = mutableListOf(Card(2, "S", false),null)
 
-        val solutionList: MutableList<List<Card?>> = mutableListOf(solution1,solution2)
+        val solutionList: MutableList<MutableList<Card?>?> = mutableListOf(solution1,solution2)
 
         val chosenSolution = solitaireSolver.ruleThree(solutionList)
 

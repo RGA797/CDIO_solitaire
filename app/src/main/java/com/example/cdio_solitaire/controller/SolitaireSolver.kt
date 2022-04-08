@@ -85,7 +85,7 @@ class SolitaireSolver {
     //returns a move that can free up another card
     private fun ruleTwo(): List<Card?>? {
         val validColumns = columns.getBottomColumnsIndexesWithBackrow()
-        val viableMoves: MutableList<List<Card?>> = ArrayList()
+        val viableMoves: MutableList<MutableList<Card?>?> = mutableListOf()
         if (validColumns.isNotEmpty()) {
             for (i in validColumns) {
                 val viableMove = getViableMove(columns.getBottomList()[i][columns.getCardIndexOfFirstUpcard(i)],false, false, false)
@@ -108,11 +108,11 @@ class SolitaireSolver {
 
     //given a list of solutions, ruleThree returns the one which involves the collumn with biggest number
     //of downcards
-    public fun ruleThree(viableMoves: MutableList<List<Card?>>): List<Card?>? {
+    public fun ruleThree(viableMoves: MutableList<MutableList<Card?>?>): MutableList<Card?>? {
         var biggestNumberOfDowncards: Int? = null
-        var currentSolution: List<Card?>? = null
+        var currentSolution: MutableList<Card?>? = null
         for (i in viableMoves){
-            if (i[0] != null) {
+            if (i?.get(0) != null) {
                 val downcards = columns.getNumberOfDowncardsForCard(i[0]!!)
                 if (biggestNumberOfDowncards == null && currentSolution == null) {
                     biggestNumberOfDowncards = downcards
@@ -200,15 +200,17 @@ class SolitaireSolver {
     //first index: from
     //second index: to
     //null in return list means an empty column
-    private fun getViableMove(card: Card, useRuleFour: Boolean, useRuleFive: Boolean, useRuleSix: Boolean): List<Card?>? {
+    private fun getViableMove(card: Card, useRuleFour: Boolean, useRuleFive: Boolean, useRuleSix: Boolean): MutableList<Card?>? {
         val bottomColumns = columns.getBottomList()
         val topColumns = columns.getTopList()
-        var solution: List<Card?>? = null
+        var currentSolution: MutableList<Card?>?
+        var bottomSolutions: MutableList<MutableList<Card?>?> = mutableListOf()
+        var topSolutions: MutableList<MutableList<Card?>?> = mutableListOf()
         //solution moving to bottom card
         for (i in bottomColumns) {
             if (i.isEmpty()) {
                 if (isValidMove(card, null, true)) {
-                    solution = listOf(card, null)
+                    bottomSolutions.add (mutableListOf(card, null))
                 }
             }
             else if (i[0].rank == card.rank && i[0].suit == card.suit) {
@@ -216,11 +218,14 @@ class SolitaireSolver {
             }
             
             else if (isValidMove(card, i[0], true)) {
-                solution = listOf(card, i[0])
+                currentSolution = mutableListOf(card, i[0])
                 if (useRuleFour){
-                    if (!ruleFour(solution)){
-                        solution = null
+                    if (!ruleFour(currentSolution)){
+                        currentSolution = null
                     }
+                }
+                if (currentSolution != null){
+                    bottomSolutions.add(currentSolution)
                 }
             }
         }
@@ -229,34 +234,53 @@ class SolitaireSolver {
         for (j in topColumns) {
             if (j.isEmpty()) {
                 if (isValidMove(card, null, false)) {
-                    solution = listOf(card, null)
+                    topSolutions.add(mutableListOf(card, null))
                 }
             }
             else if (j[0].rank == card.rank && j[0].suit == card.suit) {
                 continue
             } else if (isValidMove(card, j[0], false)) {
-                solution = listOf(card, j[0])
+                topSolutions.add(mutableListOf(card, j[0]))
             }
         }
 
         //aditional check given optional rules
         if (useRuleFive){
-            if (solution != null){
-                if (!ruleFive(solution[0]!!)){
-                    solution = null
+            for (i in bottomSolutions.indices) {
+                if (bottomSolutions[i] != null) {
+                    if (!ruleFive(bottomSolutions[i]?.get(0)!!)) {
+                        bottomSolutions[i] = null
+                    }
                 }
             }
         }
 
         //aditional check given optional rules
         if (useRuleSix){
-            if (solution != null){
-                if (!ruleSix(solution[0]!!)){
-                    solution = null
+            for (i in bottomSolutions.indices)
+            if (bottomSolutions[i] != null){
+                if (!ruleSix(bottomSolutions[i]?.get(0)!!)){
+                    bottomSolutions[i] = null
                 }
             }
         }
-        return solution
+
+        for (i in bottomSolutions.indices){
+            if (bottomSolutions[i] == null){
+                bottomSolutions.removeAt(i)
+            }
+        }
+
+        //if given a choice, use rule 3
+        if (bottomSolutions.size > 1){
+            return ruleThree(bottomSolutions)
+        }
+
+        if (bottomSolutions.size == 1){
+            return bottomSolutions[0]
+        }
+
+        return null
     }
 
     //returns true if given a move that CAN be made ALSO doesnt violate the algorithms conditional rules
