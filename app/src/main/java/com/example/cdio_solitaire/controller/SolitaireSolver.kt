@@ -280,6 +280,14 @@ class SolitaireSolver {
             return bottomSolutions[0]
         }
 
+        if (topSolutions.size > 1){
+            return ruleThree(topSolutions)
+        }
+
+        if (topSolutions.size == 1){
+            return bottomSolutions[0]
+        }
+
         return null
     }
 
