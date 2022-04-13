@@ -5,6 +5,8 @@ import com.example.cdio_solitaire.Model.Columns
 
 class SolitaireSolver {
     private val columns = Columns()
+    private var bottomSolutions: MutableList<MutableList<Card?>?> = mutableListOf()
+    private var topSolutions: MutableList<MutableList<Card?>?> = mutableListOf()
 
     public fun addCards (list: List<Card>, columnIndex: Int){
         columns.addToBottomList(list, columnIndex)
@@ -56,7 +58,10 @@ class SolitaireSolver {
                             j,
                             useRuleFour = true,
                             useRuleFive = true,
-                            useRuleSix = true
+                            useRuleSix = true,
+                            useRuleSeven = true,
+                            useRuleEight = true,
+                            useRuleNine = true,
                         )
                         if (viableMove != null) {
                             return (viableMove)
@@ -73,7 +78,7 @@ class SolitaireSolver {
         val validColumnsIndexes = columns.getColumnsIndexesWithAceOrTwo()
         if (validColumnsIndexes.isNotEmpty()) {
             for (i in validColumnsIndexes) {
-                val viableMove = getViableMove(columns.getBottomList()[i][columns.getCardIndexOfAceOrTwoUpcard(i)],false, false, false)
+                val viableMove = getViableMove(columns.getBottomList()[i][columns.getCardIndexOfAceOrTwoUpcard(i)],false, false, false, false, false, false )
                 if (viableMove != null) {
                     return (viableMove)
                 }
@@ -88,7 +93,7 @@ class SolitaireSolver {
         val viableMoves: MutableList<MutableList<Card?>?> = mutableListOf()
         if (validColumns.isNotEmpty()) {
             for (i in validColumns) {
-                val viableMove = getViableMove(columns.getBottomList()[i][columns.getCardIndexOfFirstUpcard(i)],false, false, false)
+                val viableMove = getViableMove(columns.getBottomList()[i][columns.getCardIndexOfFirstUpcard(i)],false, false, false, false, false, false )
                 if (viableMove != null) {
                     viableMoves.add(viableMove)
                 }
@@ -199,16 +204,144 @@ class SolitaireSolver {
         }
         return false
     }
+
+    fun ruleSeven(solution: MutableList<Card?>?): Boolean {
+
+        // Not interfere with your Next Card Protection
+        if (nextCardProtection(solution?.get(0)!!)){
+            return true
+        }
+
+        //Allow a play that frees a downcard
+        if (solution[0]?.let { allowsFreedDowncard(it) }!!){
+            return true
+        }
+
+        //Open up a space for a same-color card pile transfer that allows a downcard to be freed (idk what this means)
+        //if (allowsFreedDowncard(solution[0]!!) && (sameColorFreed(solution[0]!!))){
+        //    return false
+        //}
+
+        //Clear a spot for an IMMEDIATE waiting King (it cannot be to simply clear a spot)
+        if (ruleFive(solution[0]!!)){
+            return true
+        }
+
+        return false
+    }
+
+    fun ruleEight(solution: List<Card?>): Boolean{
+        //It is smooth with it's next highest even/odd partner in the column
+        if (isSmooth(solution[0])){
+            return true
+        }
+
+        //It will allow a play or transfer that will IMMEDIATELY free a downcard
+        if (freesDowncard(solution[0])){
+            return true
+        }
+
+        //There have not been any other cards already played to the column
+        if (columnPlayedTo(solution[1])){
+            return true
+        }
+
+        //You have ABSOLUTELY no other choice to continue playing (this is not a good sign)
+        if (noOtherChoice()){
+            return true
+        }
+
+        return true
+    }
+
+    fun nextCardProtection(card: Card): Boolean{
+        var nextCardProtected = false
+        for (i in columns.getBottomList()){
+            if(i[0].rank == card.rank + 1 && i[0].suit == card.suit ){
+                nextCardProtected = true
+            }
+        }
+        return nextCardProtected
+    }
+
+    fun freesDowncard(card: Card, cardIndex: Int): Boolean {
+        var willFree = false
+        val index = columns.getColumnsIndexOfCard(card)
+        if (index != null) {
+            if (columns.getBottomList()[index][cardIndex+1].isDowncard) {
+                willFree = true
+            }
+        }
+        return willFree
+    }
+
+    fun allowsFreedDowncard (card: Card): Boolean{
+        var allowsFree = false
+        val index = columns.getColumnsIndexOfCard(card)
+        if (index != null) {
+            if (columns.getBottomList()[index].size > 1) {
+                val cardToAllow = columns.getBottomList()[index][1]
+                if (!cardToAllow.isDowncard) {
+                    val viableMove = getViableMove(
+                        card,
+                        useRuleFour = true,
+                        useRuleFive = true,
+                        useRuleSix = true,
+                        useRuleSeven = true,
+                        useRuleEight = true,
+                        useRuleNine = true,
+                    )
+                    if (viableMove != null){
+                        if (viableMove[0]?.let { freesDowncard(it, 1) } != null){
+                            allowsFree = true
+                        }
+                    }
+                }
+            }
+        }
+        return allowsFree
+    }
+
+    fun sameColorFreed(card: Card): Boolean{
+        var sameColor = false
+        val index = columns.getColumnsIndexOfCard(card)
+        val bottomList = columns.getBottomList()
+
+        if (index != null) {
+            for (i in bottomList[index].indices){
+                if (bottomList[index][i].rank == card.rank && bottomList[index][i].suit == card.suit ){
+                    if (i != 0){
+                        if (bottomList[index][i-1].suit == "D" || bottomList[index][i-1].suit == "D"){
+                            if (card.suit == "D" || card.suit == "D"){
+                                sameColor = true
+                            }
+                        }
+
+                        if (bottomList[index][i-1].suit == "S" || bottomList[index][i-1].suit == "C"){
+                            if (card.suit == "S" || card.suit == "C"){
+                                sameColor = true
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return sameColor
+    }
+
+
+
+
+
+
     //returns the first found set of cards that can be moved to, otherwise null.
     //first index: from
     //second index: to
     //null in return list means an empty column
-    private fun getViableMove(card: Card, useRuleFour: Boolean, useRuleFive: Boolean, useRuleSix: Boolean): MutableList<Card?>? {
+    private fun getViableMove(card: Card, useRuleFour: Boolean, useRuleFive: Boolean, useRuleSix: Boolean, useRuleSeven: Boolean, useRuleEight: Boolean, useRuleNine: Boolean): MutableList<Card?>? {
         val bottomColumns = columns.getBottomList()
         val topColumns = columns.getTopList()
         var currentSolution: MutableList<Card?>?
-        var bottomSolutions: MutableList<MutableList<Card?>?> = mutableListOf()
-        var topSolutions: MutableList<MutableList<Card?>?> = mutableListOf()
         //solution moving to bottom card
         for (i in bottomColumns) {
             if (i.isEmpty()) {
@@ -245,6 +378,17 @@ class SolitaireSolver {
             } else if (isValidMove(card, j[0], false)) {
                 topSolutions.add(mutableListOf(card, j[0]))
             }
+
+            if (useRuleSeven){
+                if (topSolutions.isNotEmpty()) {
+                    for (i in topSolutions.indices) {
+                        if (ruleSeven(topSolutions[i]) == false) {
+                            bottomSolutions.removeAt(i)
+                        }
+                    }
+                }
+            }
+
         }
 
         //aditional check given optional rules
@@ -276,6 +420,7 @@ class SolitaireSolver {
                 bottomSolutions.removeAt(i)
             }
         }
+
 
         //if given a choice, use rule 3
         if (bottomSolutions.size > 1){
