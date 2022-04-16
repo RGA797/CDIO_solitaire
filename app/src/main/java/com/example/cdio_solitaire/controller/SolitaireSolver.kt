@@ -2,13 +2,16 @@ package com.example.cdio_solitaire.controller
 
 import com.example.cdio_solitaire.Model.Card
 import com.example.cdio_solitaire.Model.Columns
+import java.lang.IndexOutOfBoundsException
 
+//controller class meant to follow the ruling given in following article: https://www.chessandpoker.com/solitaire_strategy.html
+//uses column model class
 class SolitaireSolver {
     private val columns = Columns()
     private var bottomSolutions: MutableList<MutableList<Card?>?> = mutableListOf()
     private var topSolutions: MutableList<MutableList<Card?>?> = mutableListOf()
 
-    public fun addCards (list: List<Card>, columnIndex: Int){
+    fun addCards (list: List<Card>, columnIndex: Int){
         columns.addToBottomList(list, columnIndex)
     }
 
@@ -26,7 +29,23 @@ class SolitaireSolver {
         }
     }
 
-    public fun solve(): List<Card?>? {
+    fun printSolution(){
+        val solution = solve()
+        if (solution != null){
+            if (solution[1] != null){
+                println("solution!: " + solution[0]!!.rank + solution[0]!!.suit + " to " + solution[1]!!.rank + solution[1]!!.suit )
+            }
+            else{
+                println("solution!: " + solution[0]!!.rank + solution[0]!!.suit + " to an empty column")
+            }
+        }
+        else{
+            println("no solution found!" )
+        }
+    }
+
+
+    fun solve(): List<Card?>? {
         //kan vi bruge rule 1?
         var solution = ruleOne()
         if (solution != null) {
@@ -113,7 +132,7 @@ class SolitaireSolver {
 
     //given a list of solutions, ruleThree returns the one which involves the collumn with biggest number
     //of downcards
-    public fun ruleThree(viableMoves: MutableList<MutableList<Card?>?>): MutableList<Card?>? {
+    fun ruleThree(viableMoves: MutableList<MutableList<Card?>?>): MutableList<Card?>? {
         var biggestNumberOfDowncards: Int? = null
         var currentSolution: MutableList<Card?>? = null
         for (i in viableMoves){
@@ -231,24 +250,30 @@ class SolitaireSolver {
     }
 
     fun ruleEight(solution: List<Card?>): Boolean{
-        //It is smooth with it's next highest even/odd partner in the column
-        if (isSmooth(solution[0])){
-            return true
-        }
+        if (solution[0] != null){
+            if (solution[0]!!.rank  != 5 && solution[0]!!.rank != 6 &&  solution[0]!!.rank  != 7  && solution[0]!!.rank  != 8){
+                return true
+            }
 
-        //It will allow a play or transfer that will IMMEDIATELY free a downcard
-        if (freesDowncard(solution[0])){
-            return true
-        }
+            //It is smooth with it's next highest even/odd partner in the column
+            //if (isSmooth(solution[0])){
+            //    return true
+            //}
 
-        //There have not been any other cards already played to the column
-        if (columnPlayedTo(solution[1])){
-            return true
-        }
+            //It will allow a play or transfer that will IMMEDIATELY free a downcard
+            if (solution[0]?.let { allowsFreedDowncard(it) }!!){
+                return true
+            }
 
-        //You have ABSOLUTELY no other choice to continue playing (this is not a good sign)
-        if (noOtherChoice()){
-            return true
+            //There have not been any other cards already played to the column
+            //if (columnPlayedTo(solution[1])){
+             //   return true
+            //}
+
+            //You have ABSOLUTELY no other choice to continue playing (this is not a good sign)
+            //if (noOtherChoice()){
+            //    return true
+            //}
         }
 
         return true
@@ -268,8 +293,12 @@ class SolitaireSolver {
         var willFree = false
         val index = columns.getColumnsIndexOfCard(card)
         if (index != null) {
-            if (columns.getBottomList()[index][cardIndex+1].isDowncard) {
-                willFree = true
+            try {
+                if (columns.getBottomList()[index][cardIndex-1].isDowncard) {
+                    willFree = true
+                }
+            }catch (e: IndexOutOfBoundsException){
+                return false
             }
         }
         return willFree
@@ -328,10 +357,6 @@ class SolitaireSolver {
         }
         return sameColor
     }
-
-
-
-
 
 
     //returns the first found set of cards that can be moved to, otherwise null.

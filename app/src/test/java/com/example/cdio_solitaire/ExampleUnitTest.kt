@@ -11,7 +11,7 @@ import org.junit.Assert.*
  *
  * See [testing documentation](http://d.android.com/tools/testing).
  */
-class ExampleUnitTest {
+class SolutionUnitTest {
 
     @Test
     fun adding_cards() {
@@ -55,18 +55,7 @@ class ExampleUnitTest {
         solitaireSolver.addCards(bottom_column6, 5)
         solitaireSolver.addCards(bottom_column7, 6)
 
-        val solution = solitaireSolver.solve()
-        if (solution != null){
-            if (solution[1] != null){
-                println("solution!: " + solution[0]!!.rank + solution[0]!!.suit + ", " + solution[1]!!.rank + solution[1]!!.suit )
-            }
-            else{
-                println("solution!: " + solution[0]!!.rank + solution[0]!!.suit + ", an empty column")
-            }
-        }
-        else{
-            println("no solution found!" )
-        }
+        solitaireSolver.printSolution()
     }
 
     @Test
@@ -146,7 +135,27 @@ class ExampleUnitTest {
 
     }
 
+    @Test
+    fun solution(){
+        val solitaireSolver = SolitaireSolver()
+        val bottom_column1: MutableList<Card> = mutableListOf(Card(13, "S", false), Card(9, "D", true),Card(10, "D", true))
+        val bottom_column2: MutableList<Card> = mutableListOf(Card(9, "H", false))
+        val bottom_column3: MutableList<Card> = mutableListOf(Card(4, "H", false))
+        val bottom_column4: MutableList<Card> = mutableListOf(Card(3, "H", false))
+        val bottom_column5: MutableList<Card> = mutableListOf(Card(7, "H", false))
+        val bottom_column6: MutableList<Card> = mutableListOf()
+        val bottom_column7: MutableList<Card> = mutableListOf(Card(13, "H", false), Card(8, "S", true))
 
+        solitaireSolver.addCards(bottom_column1, 0)
+        solitaireSolver.addCards(bottom_column2, 1)
+        solitaireSolver.addCards(bottom_column3, 2)
+        solitaireSolver.addCards(bottom_column4, 3)
+        solitaireSolver.addCards(bottom_column5, 4)
+        solitaireSolver.addCards(bottom_column6, 5)
+        solitaireSolver.addCards(bottom_column7, 6)
+
+        solitaireSolver.printSolution()
+    }
 
 
 }
