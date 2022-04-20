@@ -103,6 +103,8 @@ class SolitaireSolver {
         return null
     }
 
+    //EVERY RULE FUNCTION HERE (BESIDES RULE 1 AND 2) WILL RETURN A BOOLEAN. TRUE IF A GIVEN LIST OF CARDS (A SOLUTION) VIOLATES THE SPECIFIC RULE
+
     //returns a move that involves ace or two
     private fun ruleOne(): List<Card?>? {
         val validColumnsIndexes = columns.getColumnsIndexesWithAceOrTwo()
@@ -237,20 +239,11 @@ class SolitaireSolver {
 
     fun ruleSeven(solution: MutableList<Card?>?): Boolean {
 
-        // Not interfere with your Next Card Protection
-       // if (nextCardProtection(solution?.get(0)!!)){
-        //    return true
-        //}
 
         //Allow a play that frees a downcard
         if (solution?.get(0)?.let { allowsFreedDowncard(it) }!!){
             return true
         }
-
-        //Open up a space for a same-color card pile transfer that allows a downcard to be freed (idk what this means)
-        //if (allowsFreedDowncard(solution[0]!!) && (sameColorFreed(solution[0]!!))){
-        //    return false
-        //}
 
         //Clear a spot for an IMMEDIATE waiting King (it cannot be to simply clear a spot)
         if (ruleFive(solution[0]!!)){
@@ -260,49 +253,41 @@ class SolitaireSolver {
         return false
     }
 
-    fun ruleEight(solution: List<Card?>): Boolean{
-        if (solution[0] != null){
+    fun ruleEight(solution: List<Card?>?): Boolean{
+        if (solution != null){
             if (solution[0]!!.rank  != 5 && solution[0]!!.rank != 6 &&  solution[0]!!.rank  != 7  && solution[0]!!.rank  != 8){
                 return true
             }
-
-            //It is smooth with it's next highest even/odd partner in the column
-            //if (isSmooth(solution[0])){
-            //    return true
-            //}
 
             //It will allow a play or transfer that will IMMEDIATELY free a downcard
             if (solution[0]?.let { allowsFreedDowncard(it) }!!){
                 return true
             }
 
-            //There have not been any other cards already played to the column
-            //if (columnPlayedTo(solution[1])){
-             //   return true
-            //}
+            //if no other choice exists you have to accept
+            var otherChoise = false
+            for (i in bottomSolutions.indices){
+                if (bottomSolutions[i] != null){
 
-            //You have ABSOLUTELY no other choice to continue playing (this is not a good sign)
-            //if (noOtherChoice()){
-            //    return true
-            //}
-        }
+                    //if card moving from is different than given solution
+                    if (bottomSolutions[i]?.get(0)?.rank  != solution[0]?.rank || bottomSolutions[i]?.get(0)?.suit  != solution[0]?.suit) {
+                        otherChoise = true
+                    }
 
-        return true
-    }
-
-    /*
-    next card protection is not used
-
-    fun nextCardProtection(card: Card): Boolean{
-        var nextCardProtected = false
-        for (i in columns.getBottomList()){
-            if(i[0].rank == card.rank + 1 && i[0].suit == card.suit ){
-                nextCardProtected = true
+                    //if card moving to is different than given solution
+                    if (bottomSolutions[i]?.get(1)?.rank  != solution[1]?.rank || bottomSolutions[i]?.get(1)?.suit  != solution[1]?.suit){
+                        otherChoise = true
+                    }
+                }
             }
+            if (!otherChoise){
+                return true
         }
-        return nextCardProtected
     }
-    */
+
+        return false
+    }
+
 
     //returns true if a given card and its cardindex
     fun freesDowncard(card: Card, cardIndex: Int): Boolean {
@@ -404,6 +389,7 @@ class SolitaireSolver {
                 if (currentSolution != null){
                     bottomSolutions.add(currentSolution)
                 }
+
             }
         }
 
@@ -456,6 +442,18 @@ class SolitaireSolver {
             }
         }
 
+        if (useRuleEight){
+            for (i in bottomSolutions.indices) {
+                if (bottomSolutions[i] != null) {
+                    if (bottomSolutions[i]?.get(0)?.rank == 13) {
+                        if (!bottomSolutions[i]?.let { ruleEight(it) }!!) {
+                            bottomSolutions[i] = null
+                        }
+                    }
+                }
+            }
+        }
+        //remove null values from solution list (solutions that violate algorithm rules)
         for (i in bottomSolutions.indices){
             if (bottomSolutions[i] == null){
                 bottomSolutions.removeAt(i)
@@ -463,23 +461,29 @@ class SolitaireSolver {
         }
 
 
-        //if given a choice, use rule 3
+        //the order in which solutions are given as the "optimal play", is decided to be bottom solutions before top solutions
+
+        //if given a choice(bottom solution), use rule 3
         if (bottomSolutions.size > 1){
             return ruleThree(bottomSolutions)
         }
 
+        //if only one choice. return it
         if (bottomSolutions.size == 1){
             return bottomSolutions[0]
         }
 
+        //if given a choice (top solution), use rule 3
         if (topSolutions.size > 1){
             return ruleThree(topSolutions)
         }
 
+        //if only one choice. return it
         if (topSolutions.size == 1){
             return bottomSolutions[0]
         }
 
+        //if no solutions at all. return null
         return null
     }
 
