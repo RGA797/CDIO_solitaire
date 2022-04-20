@@ -11,6 +11,7 @@ class SolitaireSolver {
     private var bottomSolutions: MutableList<MutableList<Card?>?> = mutableListOf()
     private var topSolutions: MutableList<MutableList<Card?>?> = mutableListOf()
 
+    //adds every element of a list of cards to bottom column
     fun addCards (list: List<Card>, columnIndex: Int){
         columns.addToBottomList(list, columnIndex)
     }
@@ -29,6 +30,7 @@ class SolitaireSolver {
         }
     }
 
+    //prints the solution the algorithm has found
     fun printSolution(){
         val solution = solve()
         if (solution != null){
@@ -44,20 +46,29 @@ class SolitaireSolver {
         }
     }
 
-
+    //solution algorithm. follows rules of the mentioned article
     fun solve(): List<Card?>? {
-        //kan vi bruge rule 1?
+
+        //if a solution exists that follows rule 1, return it
         var solution = ruleOne()
         if (solution != null) {
             return solution
         }
 
-        //kan vi bruge rule 2?
+        //if a solution exists that follows rule 2, return it
         solution = ruleTwo()
         if (solution != null) {
             return solution
         }
 
+        //returns the optimal solution that follows the rules (if it exists)
+        //prioritizes bottom to bottom transfers, then bottom to top.
+        solution = generalSolution()
+        if (solution != null) {
+            return solution
+        }
+
+        //if no optimal solution found, try moving any bottom card to top column
         solution = generalSolution()
         if (solution != null) {
             return solution
@@ -227,12 +238,12 @@ class SolitaireSolver {
     fun ruleSeven(solution: MutableList<Card?>?): Boolean {
 
         // Not interfere with your Next Card Protection
-        if (nextCardProtection(solution?.get(0)!!)){
-            return true
-        }
+       // if (nextCardProtection(solution?.get(0)!!)){
+        //    return true
+        //}
 
         //Allow a play that frees a downcard
-        if (solution[0]?.let { allowsFreedDowncard(it) }!!){
+        if (solution?.get(0)?.let { allowsFreedDowncard(it) }!!){
             return true
         }
 
@@ -279,6 +290,9 @@ class SolitaireSolver {
         return true
     }
 
+    /*
+    next card protection is not used
+
     fun nextCardProtection(card: Card): Boolean{
         var nextCardProtected = false
         for (i in columns.getBottomList()){
@@ -288,7 +302,9 @@ class SolitaireSolver {
         }
         return nextCardProtected
     }
+    */
 
+    //returns true if a given card and its cardindex
     fun freesDowncard(card: Card, cardIndex: Int): Boolean {
         var willFree = false
         val index = columns.getColumnsIndexOfCard(card)

@@ -1,8 +1,10 @@
 package com.example.cdio_solitaire.Model
 
-
+//Model class of mutable 2d lists of Card objects (top/bottom list).
+//has get functions for specific conditions, returning cards and indexes
+//has functions returning booleans depending on if a condition is true
 class Columns() {
-
+        //bottom columns
         private val bottom_column1: MutableList<Card> = mutableListOf()
         private val bottom_column2: MutableList<Card> = mutableListOf()
         private val bottom_column3: MutableList<Card> = mutableListOf()
@@ -11,14 +13,17 @@ class Columns() {
         private val bottom_column6: MutableList<Card> = mutableListOf()
         private val bottom_column7: MutableList<Card> = mutableListOf()
 
+        //top columns
         private val top_column1: MutableList<Card> = mutableListOf()
         private val top_column2: MutableList<Card> = mutableListOf()
         private val top_column3: MutableList<Card> = mutableListOf()
         private val top_column4: MutableList<Card> = mutableListOf()
 
+        //lists
         private val topList: List<MutableList<Card>> = listOf(top_column1,top_column2,top_column3,top_column4)
         private val bottomList:List<MutableList<Card>> = listOf(bottom_column1,bottom_column2,bottom_column3,bottom_column4,bottom_column5,bottom_column6,bottom_column7)
 
+        //given a list of cards, adds every card into given column index of bottom list
         fun addToBottomList(list: List<Card>, columnIndex: Int){
                 var number = 0
                 while (number <list.size){
@@ -27,14 +32,17 @@ class Columns() {
                 }
         }
 
+        //returns bottom list
         public fun getBottomList(): List<List<Card>> {
                 return bottomList
         }
 
+        //returns top list
         public fun getTopList(): List<List<Card>> {
                 return topList
         }
 
+        //returns true if list in given index of bottom list, has downcards
         public fun columnHasBackrow(column_index: Int): Boolean {
                 for (j in bottomList[column_index]) {
                         if (j.isDowncard){
@@ -44,6 +52,7 @@ class Columns() {
                 return false
         }
 
+        //returns first card index in list at given column index (bottom list)
         public fun getCardIndexOfFirstUpcard(column_index: Int): Int {
                 var cardIndex = 0
                 for (j in bottomList[column_index]) {
@@ -55,6 +64,7 @@ class Columns() {
                 return cardIndex
         }
 
+        //returns list of every bottom column index, that has an ace or two (deuce)
         public fun getColumnsIndexesWithAceOrTwo(): MutableList<Int> {
                 val viableIndexes = mutableListOf<Int>()
                 for (i in 0..6) {
@@ -73,6 +83,8 @@ class Columns() {
                         return viableIndexes
         }
 
+
+        //returns list of indexes with the longest bottom column index
         fun getLongestBottomColumnsIndexes(): MutableList<Int> {
                 var longest_backrow_size = 0
                 var longest_column_indexes = mutableListOf<Int>()
@@ -93,9 +105,9 @@ class Columns() {
                         }
                 }
                 return  longest_column_indexes
-
         }
 
+        //returns list of indexes, of bottom columns in bottom list
         public fun getBottomColumnsIndexesWithBackrow(): MutableList<Int> {
                 var validIndexes = mutableListOf<Int>()
                 for (collumn_index in 0..6) {
@@ -109,10 +121,12 @@ class Columns() {
                 return  validIndexes
         }
 
+        //returns column length in bottom list given an index
         fun getColumnSize(collumnIndex: Int): Int{
                 return bottomList[collumnIndex].size
         }
 
+        //returns column index given a card. null if the card doesnt exist in bottom list
         fun getColumnsIndexOfCard(card: Card): Int?{
                 for (i in 0..6) {
                         for (j in bottomList[i]) {
@@ -135,6 +149,9 @@ class Columns() {
                 }
                 return cardIndex
         }
+
+        //returns number of downcards in the bottom column of given card.
+        //returns 0 if the card doesnt exist, or there are no downcards
         public fun getNumberOfDowncardsForCard(card: Card): Int {
                 var downcards = 0
                 for (i in 0..6) {
@@ -151,6 +168,8 @@ class Columns() {
                 }
                 return downcards
         }
+
+        //returns biggest number of downcards in the bottom columns
         fun getBiggestNumberOfDowncards(): Int{
                 var biggestNumber = 0
                 for (i in bottomList){
