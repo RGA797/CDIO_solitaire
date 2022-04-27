@@ -208,7 +208,8 @@ class SolitaireSolver {
     }
 
     //returns true if there is a king waiting to take a spot after moving a card
-    //note: the function assumes that a solution exists
+    //note: the function assumes that a solution exists, and will still return true if the play will not actually clear the spot
+    //only returns false if a play will clear a spot AND there isn't a king waiting to take it
     fun ruleFive(card: Card): Boolean{
         val bottomList = columns.getBottomList()
         var kingWaiting = false
@@ -246,10 +247,10 @@ class SolitaireSolver {
                 return true
             }
         }
-        if (cardFound && !emptySpot){
-            return true
+        if (!kingWaiting && emptySpot){
+            return false
         }
-        return false
+        return true
     }
 
     fun ruleSix(card: Card): Boolean {
@@ -263,21 +264,17 @@ class SolitaireSolver {
     }
 
     //takes a solution and returns true if it does not violate rule 7
-    private fun ruleSeven(solution: MutableList<Card?>?): Boolean {
+    fun ruleSeven(solution: MutableList<Card?>?): Boolean {
         if(solution == null){
             return true
         }
 
         //if moving a card allows a play that frees a downcard, return true
+        //Clear a spot for an IMMEDIATE waiting King (it cannot be to simply clear a spot)
         if (solution [0] != null) {
-            if (allowsFreedDowncard(solution[0]!!)) {
+            if (allowsFreedDowncard(solution[0]!!) && ruleFive(solution[0]!!)) {
                 return true
             }
-        }
-
-        //Clear a spot for an IMMEDIATE waiting King (it cannot be to simply clear a spot)
-        if (ruleFive(solution[0]!!)){
-            return true
         }
 
         return false
@@ -363,7 +360,7 @@ class SolitaireSolver {
                                 if (cardList[i + 2].isDowncard) {
                                     //now we check if the card to allow has a viable move
                                     val viableMove = getViableMove(
-                                        card,
+                                        cardToAllow,
                                         useRuleFour = true,
                                         useRuleFive = true,
                                         useRuleSix = true,
@@ -424,7 +421,7 @@ class SolitaireSolver {
             }
 
             //if a move is valid, it is added to the list of potential solutions for the ONE given card
-            else if (isValidMove(card, i[0], true)) {
+            else if (i.isNotEmpty() && isValidMove(card, i[0], true)) {
                 currentSolution = mutableListOf(card, i[0])
 
                 //if we want to use rule four but its violated the solution becomes null

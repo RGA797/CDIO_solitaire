@@ -81,12 +81,40 @@ class SolutionUnitTest {
         val solution2: MutableList<Card?> = mutableListOf(Card(2, "S", false),null)
 
         val solutionList: MutableList<MutableList<Card?>?> = mutableListOf(solution1,solution2)
-
         val chosenSolution = solitaireSolver.ruleThree(solutionList)
-
         assertEquals(solution1, chosenSolution)
     }
 
+
+    @Test
+    fun rule_Seven(){
+        val solitaireSolver = SolitaireSolver()
+        val bottom_column1: MutableList<Card> = mutableListOf(Card(6, "S", false), Card(6, "C", false), Card(null,null,true))
+        val bottom_column2: MutableList<Card> = mutableListOf(Card(7, "S", false), Card(7, "C", true), Card(null,null,true))
+        val bottom_column3: MutableList<Card> = mutableListOf(Card(10, "C", false))
+        val bottom_column4: MutableList<Card> = mutableListOf(Card(9, "S", false))
+        val bottom_column5: MutableList<Card> =  mutableListOf(Card(7, "D", false), Card(7, "H", false), Card(null,null,false))
+        val bottom_column6: MutableList<Card> = mutableListOf(Card(8, "D", false), Card(8, "H", false), Card(null,null,true))
+        val bottom_column7: MutableList<Card> = mutableListOf()
+
+        solitaireSolver.addCards(bottom_column1, 0)
+        solitaireSolver.addCards(bottom_column2, 1)
+        solitaireSolver.addCards(bottom_column3, 2)
+        solitaireSolver.addCards(bottom_column4, 3)
+        solitaireSolver.addCards(bottom_column5, 4)
+        solitaireSolver.addCards(bottom_column6, 5)
+        solitaireSolver.addCards(bottom_column7, 6)
+
+        val solution1: MutableList<Card?> = mutableListOf(Card(6, "S", false),null)
+        val solution2: MutableList<Card?> = mutableListOf(Card(7, "S", false),null)
+        val solution3: MutableList<Card?> = mutableListOf(Card(7, "D", false),null)
+        val solution4: MutableList<Card?> = mutableListOf(Card(8, "D", false),null)
+
+        assertEquals(solitaireSolver.ruleSeven(solution1), true)
+        assertEquals(solitaireSolver.ruleSeven(solution2), false)
+        assertEquals(solitaireSolver.ruleSeven(solution3), false)
+        assertEquals(solitaireSolver.ruleSeven(solution4), true)
+    }
 
     @Test
     fun rule_five(){
@@ -140,11 +168,11 @@ class SolutionUnitTest {
         val solitaireSolver = SolitaireSolver()
         val bottom_column1: MutableList<Card> = mutableListOf(Card(9, "D", false))
         val bottom_column2: MutableList<Card> = mutableListOf(Card(3, "C", false), Card(null, null, true))
-        val bottom_column3: MutableList<Card> = mutableListOf(Card(11, "D", false), Card(null, "S", true), Card(8, "S", true))
-        val bottom_column4: MutableList<Card> = mutableListOf(Card(4, "S", false), Card(8, "S", true), Card(8, "S", true), Card(8, "S", true))
-        val bottom_column5: MutableList<Card> = mutableListOf(Card(13, "D", false), Card(8, "S", true), Card(8, "S", true), Card(8, "S", true), Card(8, "S", true))
-        val bottom_column6: MutableList<Card> = mutableListOf(Card(null, "D", false), Card(8, "S", true), Card(8, "S", true), Card(8, "S", true), Card(8, "S", true), Card(8, "S", true))
-        val bottom_column7: MutableList<Card> = mutableListOf(Card(5, "D", false), Card(8, "S", true), Card(8, "S", true), Card(8, "S", true), Card(8, "S", true), Card(8, "S", true), Card(8, "S", true), Card(8, "S", true))
+        val bottom_column3: MutableList<Card> = mutableListOf(Card(11, "D", false), Card(null, null, true), Card(null, null, true))
+        val bottom_column4: MutableList<Card> = mutableListOf(Card(4, "S", false), Card(null, null, true), Card(null, null, true), Card(null, null, true))
+        val bottom_column5: MutableList<Card> = mutableListOf(Card(13, "D", false), Card(null, null, true), Card(null, null, true),Card(null, null, true), Card(null, null, true))
+        val bottom_column6: MutableList<Card> = mutableListOf(Card(2, "D", false), Card(null, null, true), Card(8, "S", true),Card(null, null, true),Card(null, null, true),Card(null, null, true))
+        val bottom_column7: MutableList<Card> = mutableListOf(Card(5, "D", false), Card(null, null, true),Card(null, null, true),Card(null, null, true),Card(null, null, true),Card(null, null, true),Card(null, null, true))
 
         solitaireSolver.addCards(bottom_column1, 0)
         solitaireSolver.addCards(bottom_column2, 1)
