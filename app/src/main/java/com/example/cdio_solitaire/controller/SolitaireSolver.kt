@@ -69,12 +69,13 @@ class SolitaireSolver {
         }
 
         //if no optimal solution found, try moving any bottom card to top column
-        solution = generalSolution()
+        solution = solutionWithoutRuling()
         if (solution != null) {
             return solution
         }
 
-        return solution
+        //if no valid moves whatsoever, return null
+        return null
     }
 
     //returns a move that involves ace or two
@@ -92,6 +93,31 @@ class SolitaireSolver {
                             useRuleSeven = true,
                             useRuleEight = true,
                             useRuleNine = true,
+                        )
+                        if (viableMove != null) {
+                            return (viableMove)
+                        }
+                    }
+                }
+            }
+        }
+        return null
+    }
+
+    private fun solutionWithoutRuling(): MutableList<Card?>? {
+        val bottomList = columns.getBottomList()
+        if (bottomList.isNotEmpty()) {
+            for (i in bottomList) {
+                for (j in i){
+                    if (!j.isDowncard) {
+                        val viableMove = getViableMove(
+                            j,
+                            useRuleFour = false,
+                            useRuleFive = false,
+                            useRuleSix = false,
+                            useRuleSeven = false,
+                            useRuleEight = false,
+                            useRuleNine = false,
                         )
                         if (viableMove != null) {
                             return (viableMove)
@@ -332,34 +358,6 @@ class SolitaireSolver {
         return allowsFree
     }
 
-    fun sameColorFreed(card: Card): Boolean{
-        var sameColor = false
-        val index = columns.getColumnsIndexOfCard(card)
-        val bottomList = columns.getBottomList()
-
-        if (index != null) {
-            for (i in bottomList[index].indices){
-                if (bottomList[index][i].rank == card.rank && bottomList[index][i].suit == card.suit ){
-                    if (i != 0){
-                        if (bottomList[index][i-1].suit == "D" || bottomList[index][i-1].suit == "D"){
-                            if (card.suit == "D" || card.suit == "D"){
-                                sameColor = true
-                            }
-                        }
-
-                        if (bottomList[index][i-1].suit == "S" || bottomList[index][i-1].suit == "C"){
-                            if (card.suit == "S" || card.suit == "C"){
-                                sameColor = true
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        return sameColor
-    }
-
-
     //returns the first found set of cards that can be moved to, otherwise null.
     //first index: from
     //second index: to
@@ -367,20 +365,37 @@ class SolitaireSolver {
     private fun getViableMove(card: Card, useRuleFour: Boolean, useRuleFive: Boolean, useRuleSix: Boolean, useRuleSeven: Boolean, useRuleEight: Boolean, useRuleNine: Boolean): MutableList<Card?>? {
         val bottomColumns = columns.getBottomList()
         val topColumns = columns.getTopList()
+        var ownColumn: Boolean
         var currentSolution: MutableList<Card?>?
-        //solution moving to bottom card
+
+        //solution moving to bottom card.
         for (i in bottomColumns) {
+
+            //if moving to empty column
             if (i.isEmpty()) {
                 if (isValidMove(card, null, true)) {
                     bottomSolutions.add (mutableListOf(card, null))
                 }
             }
-            else if (i[0].rank == card.rank && i[0].suit == card.suit) {
+
+            //do not consider moving one card to its own column.
+            //note: this makes the algorithm potentially much slower with a nested loop, but its all we can do without prior overhead or more complex search algorithms.
+            ownColumn = false
+            for (j in i) {
+                if (j.rank == card.rank && j.suit == card.suit) {
+                    ownColumn = true
+                    break
+                }
+            }
+            if (ownColumn){
                 continue
             }
-            
+
+            //if a move is valid, it is added to the list of potential solutions for the ONE given card
             else if (isValidMove(card, i[0], true)) {
                 currentSolution = mutableListOf(card, i[0])
+
+                //if we want to use rule four but its violated the solution becomes null
                 if (useRuleFour){
                     if (!ruleFour(currentSolution)){
                         currentSolution = null
@@ -395,21 +410,36 @@ class SolitaireSolver {
 
         //solution moving to top card
         for (j in topColumns) {
+
+            //empty columns solutions added to list
             if (j.isEmpty()) {
                 if (isValidMove(card, null, false)) {
                     topSolutions.add(mutableListOf(card, null))
                 }
             }
-            else if (j[0].rank == card.rank && j[0].suit == card.suit) {
+
+            //like bottom columns, we do not consider card moving to their own top columns
+            ownColumn = false
+            for (z in j) {
+                if (z.rank == card.rank && z.suit == card.suit) {
+                    ownColumn = true
+                    break
+                }
+            }
+            if (ownColumn){
                 continue
-            } else if (isValidMove(card, j[0], false)) {
+            }
+
+            //if given card can move to a top column, add it to top solutions list
+            else if (isValidMove(card, j[0], false)) {
                 topSolutions.add(mutableListOf(card, j[0]))
             }
 
+            //if rule seven is toggled, we go through every solution and remove them if they violate it
             if (useRuleSeven){
                 if (topSolutions.isNotEmpty()) {
                     for (i in topSolutions.indices) {
-                        if (ruleSeven(topSolutions[i]) == false) {
+                        if (!ruleSeven(topSolutions[i])) {
                             bottomSolutions.removeAt(i)
                         }
                     }
@@ -418,7 +448,9 @@ class SolitaireSolver {
 
         }
 
-        //aditional check given optional rules
+        //aditional check given optional rules. these only null the solutions, but we remove them later
+
+        //rule five
         if (useRuleFive){
             for (i in bottomSolutions.indices) {
                 if (bottomSolutions[i] != null) {
@@ -429,7 +461,7 @@ class SolitaireSolver {
             }
         }
 
-        //aditional check given optional rules
+        //rule six
         if (useRuleSix){
             for (i in bottomSolutions.indices) {
                 if (bottomSolutions[i] != null) {
@@ -442,6 +474,7 @@ class SolitaireSolver {
             }
         }
 
+        //rule eight
         if (useRuleEight){
             for (i in bottomSolutions.indices) {
                 if (bottomSolutions[i] != null) {
@@ -453,6 +486,7 @@ class SolitaireSolver {
                 }
             }
         }
+
         //remove null values from solution list (solutions that violate algorithm rules)
         for (i in bottomSolutions.indices){
             if (bottomSolutions[i] == null){
@@ -536,7 +570,6 @@ class SolitaireSolver {
             }
         }
 
-
         //ruling for moving onto a top column
         else if (!bottomRules) {
 
@@ -576,7 +609,7 @@ class SolitaireSolver {
             }
         }
 
-        //if the move isnt found to be valid, return false
+        //if the move isn't found to be valid, return false
         return false
     }
 }
