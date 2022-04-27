@@ -272,7 +272,10 @@ class SolitaireSolver {
         //if moving a card allows a play that frees a downcard, return true
         //Clear a spot for an IMMEDIATE waiting King (it cannot be to simply clear a spot)
         if (solution [0] != null) {
-            if (allowsFreedDowncard(solution[0]!!) && ruleFive(solution[0]!!)) {
+            if (allowsFreedDowncard(solution[0]!!)) {
+                return true
+            }
+            if ( ruleFive(solution[0]!!)){
                 return true
             }
         }

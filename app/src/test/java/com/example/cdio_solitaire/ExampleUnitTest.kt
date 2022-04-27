@@ -110,10 +110,11 @@ class SolutionUnitTest {
         val solution3: MutableList<Card?> = mutableListOf(Card(7, "D", false),null)
         val solution4: MutableList<Card?> = mutableListOf(Card(8, "D", false),null)
 
-        assertEquals(solitaireSolver.ruleSeven(solution1), true)
-        assertEquals(solitaireSolver.ruleSeven(solution2), false)
-        assertEquals(solitaireSolver.ruleSeven(solution3), false)
-        assertEquals(solitaireSolver.ruleSeven(solution4), true)
+
+        assertEquals(solitaireSolver.allowsFreedDowncard(solution1[0]!!), true)
+        assertEquals(solitaireSolver.allowsFreedDowncard(solution2[0]!!), false)
+        assertEquals(solitaireSolver.allowsFreedDowncard(solution3[0]!!), false)
+        assertEquals(solitaireSolver.allowsFreedDowncard(solution4[0]!!), true)
     }
 
     @Test
@@ -160,7 +161,6 @@ class SolutionUnitTest {
 
         assertEquals(solitaireSolver.ruleSix(Card(13,"H", false)), false)
         assertEquals(solitaireSolver.ruleSix(Card(13,"S", false)), true)
-
     }
 
     @Test
