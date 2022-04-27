@@ -10,7 +10,7 @@ Suit : D = Diamond, H = Heart, C = Club, S = Spade
 Downcard is a boolean: true if card picture is face-up, otherwise false
  */
 
-class Card(var rank: Int, var suit: String, var isDowncard: Boolean) {
+class Card(var rank: Int?, var suit: String?, var isDowncard: Boolean) {
     fun flipCard(){
         isDowncard= !isDowncard
     }

@@ -492,43 +492,91 @@ class SolitaireSolver {
         var suitMoveValid = false
         var rankMoveValid = false
 
+
+        //ruling for moving onto a bottom column
         if (bottomRules) {
-            if (cardToMoveTo == null && cardToMove.rank == 13) {
-                return true
-            }
-            if (cardToMoveTo != null) {
-                if ((cardToMove.suit == "S" || cardToMove.suit == "C") && (cardToMoveTo.suit == "D" || cardToMoveTo.suit == "H")) {//black card
-                    suitMoveValid = true
-                } else if ((cardToMove.suit == "D" || cardToMove.suit == "H") && (cardToMoveTo.suit == "S" || cardToMoveTo.suit == "C")) { //red card
-                    suitMoveValid = true
+
+            //moving cards with null ranks or suits are not considered
+            if (cardToMove.suit != null && cardToMove.rank != null) {
+
+                //likewise moving to a non null card with non null ranks or suits are not considered
+                if (cardToMoveTo != null){
+                    if (cardToMoveTo.rank  == null || cardToMoveTo.suit == null){
+                        return false
+                    }
                 }
 
-                if (cardToMove.rank + 1 == cardToMoveTo.rank) { //Rank move valid
-                    rankMoveValid = true
-                }
-
-                if (suitMoveValid && rankMoveValid) {
+                //moving to an empty column can only be done with a king
+                if (cardToMoveTo == null && cardToMove.rank == 13) {
                     return true
                 }
+
+                //moving to a column with a card has specific ruling. Only moves to cards with one rank higher from the moved cards AND has a different color are valid
+                if (cardToMoveTo != null) {
+
+                    //ruling for valid suits
+                    if ((cardToMove.suit == "S" || cardToMove.suit == "C") && (cardToMoveTo.suit == "D" || cardToMoveTo.suit == "H")) {//moving black cards
+                        suitMoveValid = true
+                    } else if ((cardToMove.suit == "D" || cardToMove.suit == "H") && (cardToMoveTo.suit == "S" || cardToMoveTo.suit == "C")) { //moving red cards
+                        suitMoveValid = true
+                    }
+
+                    //ruling for valid ranks
+                    if (cardToMove.rank!! + 1 == cardToMoveTo.rank) { //Rank move valid
+                        rankMoveValid = true
+                    }
+
+                    if (suitMoveValid && rankMoveValid) { //if both ranks and suits are valid, the move is valid
+                        return true
+                    }
+
+                }
+
+
             }
         }
 
+
+        //ruling for moving onto a top column
         else if (!bottomRules) {
-            if (cardToMoveTo == null && cardToMove.rank == 1) {
-                return true
-            }
-            if (cardToMoveTo != null) {
-                if (cardToMove.suit == cardToMoveTo.suit) {
-                    suitMoveValid = true
+
+            //moving cards with null ranks or suits are not considered
+            if (cardToMove.suit != null && cardToMove.rank != null) {
+
+                //likewise moving to a non null card with non null ranks or suits are not considered
+                if (cardToMoveTo != null){
+                    if (cardToMoveTo.rank  == null || cardToMoveTo.suit == null){
+                        return false
+                    }
                 }
-                if (cardToMove.rank - 1 == cardToMoveTo.rank) { //Rank move valid
-                    rankMoveValid = true
-                }
-                if (suitMoveValid && rankMoveValid) {
+
+                //moving to an empty top column is allowed, but only for aces
+                if (cardToMoveTo == null && cardToMove.rank == 1) {
                     return true
+                }
+
+                //if we move to a top column with a card, there are rules. Only moves to cards with one rank lower from the moved cards AND the same suit are valid
+                if (cardToMoveTo != null) {
+
+                    //if same suit, suit move is valid
+                    if (cardToMove.suit == cardToMoveTo.suit) {
+                        suitMoveValid = true
+                    }
+
+                    //if moving to a rank one lower, rank move is valid
+                    if (cardToMove.rank!! - 1 == cardToMoveTo.rank) { //Rank move valid
+                        rankMoveValid = true
+                    }
+
+                    //having both a valid suit and rank makes for a valid top move
+                    if (suitMoveValid && rankMoveValid) {
+                        return true
+                    }
                 }
             }
         }
+
+        //if the move isnt found to be valid, return false
         return false
     }
 }
