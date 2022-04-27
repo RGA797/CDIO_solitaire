@@ -103,6 +103,7 @@ class SolitaireSolver {
         return null
     }
 
+    //returns a solution without rule 4-8 (the constrictive rules)
     private fun solutionWithoutRuling(): MutableList<Card?>? {
         val bottomList = columns.getBottomList()
         if (bottomList.isNotEmpty()) {
@@ -261,12 +262,17 @@ class SolitaireSolver {
         return false
     }
 
-    fun ruleSeven(solution: MutableList<Card?>?): Boolean {
-
-
-        //Allow a play that frees a downcard
-        if (solution?.get(0)?.let { allowsFreedDowncard(it) }!!){
+    //takes a solution and returns true if it does not violate rule 7
+    private fun ruleSeven(solution: MutableList<Card?>?): Boolean {
+        if(solution == null){
             return true
+        }
+
+        //if moving a card allows a play that frees a downcard, return true
+        if (solution [0] != null) {
+            if (allowsFreedDowncard(solution[0]!!)) {
+                return true
+            }
         }
 
         //Clear a spot for an IMMEDIATE waiting King (it cannot be to simply clear a spot)
@@ -276,7 +282,7 @@ class SolitaireSolver {
 
         return false
     }
-
+    //takes a solution and returns true if it does not violate rule 8
     fun ruleEight(solution: List<Card?>?): Boolean{
         if (solution != null){
             if (solution[0]!!.rank  != 5 && solution[0]!!.rank != 6 &&  solution[0]!!.rank  != 7  && solution[0]!!.rank  != 8){
@@ -313,13 +319,13 @@ class SolitaireSolver {
     }
 
 
-    //returns true if a given card and its cardindex
-    fun freesDowncard(card: Card, cardIndex: Int): Boolean {
+    //returns true if a given card frees a downcard if moved. cardIndex needed
+    private fun freesDowncard(card: Card, cardIndex: Int): Boolean {
         var willFree = false
         val index = columns.getColumnsIndexOfCard(card)
         if (index != null) {
             try {
-                if (columns.getBottomList()[index][cardIndex-1].isDowncard) {
+                if (columns.getBottomList()[index][cardIndex+1].isDowncard) {
                     willFree = true
                 }
             }catch (e: IndexOutOfBoundsException){
@@ -329,25 +335,54 @@ class SolitaireSolver {
         return willFree
     }
 
+    //this function returns true if moving a card will allow the card beneath it to free a downcard (the card to free the downcard has to have an immediate valid move for the ruling)
     fun allowsFreedDowncard (card: Card): Boolean{
         var allowsFree = false
-        val index = columns.getColumnsIndexOfCard(card)
-        if (index != null) {
-            if (columns.getBottomList()[index].size > 1) {
-                val cardToAllow = columns.getBottomList()[index][1]
-                if (!cardToAllow.isDowncard) {
-                    val viableMove = getViableMove(
-                        card,
-                        useRuleFour = true,
-                        useRuleFive = true,
-                        useRuleSix = true,
-                        useRuleSeven = true,
-                        useRuleEight = true,
-                    )
-                    if (viableMove != null){
-                        if (viableMove[0]?.let { freesDowncard(it, 1) } != null){
-                            allowsFree = true
+        val columnIndex = columns.getColumnsIndexOfCard(card)
+        if (columnIndex != null) {
+            val cardList = columns.getBottomList()[columnIndex]
+            //card the column size has to be at minimum 3. ex: [cardMoved, allowedCardThatFrees, downcard]
+            if (cardList.size > 2) {
+
+                //identify allowedCardThatFrees
+                for (i in cardList.indices) {
+                    //if card to move identified
+                    if (cardList[i].rank == card.rank && cardList[i].suit == card.suit) {
+
+                        //if there is a card to allow. structure of index check gotten from https://stackoverflow.com/questions/2131802/arraylist-how-can-i-check-if-an-index-exists
+                        if (i >= cardList.size - 2) {
+                            //index not valid
+                            allowsFree = false
+                        } else {
+                            //the card to allow a downcard to be freed is one index above the card moved. if it exists, and has a valid move, allowFree is true
+                            val cardToAllow = cardList[i + 1]
+
+                            //the card to allow cant be a downcard
+                            if (!cardToAllow.isDowncard) {
+                                //the card below that one has to be a downcard though
+                                if (cardList[i + 2].isDowncard) {
+                                    //now we check if the card to allow has a viable move
+                                    val viableMove = getViableMove(
+                                        card,
+                                        useRuleFour = true,
+                                        useRuleFive = true,
+                                        useRuleSix = true,
+                                        useRuleSeven = true,
+                                        useRuleEight = true,
+                                    )
+
+                                    //if there is a viable move and the card beneath it is a downcard. allow free is true
+                                    if (viableMove != null) {
+                                        if (viableMove[0] != null) {
+                                            if (freesDowncard(viableMove[0]!!, i + 1)) {
+                                                allowsFree = true
+                                            }
+                                        }
+                                    }
+                                }
+                            }
                         }
+                        break
                     }
                 }
             }
@@ -413,6 +448,7 @@ class SolitaireSolver {
                 if (isValidMove(card, null, false)) {
                     topSolutions.add(mutableListOf(card, null))
                 }
+                continue
             }
 
             //like bottom columns, we do not consider card moving to their own top columns
