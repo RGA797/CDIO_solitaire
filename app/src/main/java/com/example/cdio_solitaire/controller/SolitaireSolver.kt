@@ -92,7 +92,6 @@ class SolitaireSolver {
                             useRuleSix = true,
                             useRuleSeven = true,
                             useRuleEight = true,
-                            useRuleNine = true,
                         )
                         if (viableMove != null) {
                             return (viableMove)
@@ -117,7 +116,6 @@ class SolitaireSolver {
                             useRuleSix = false,
                             useRuleSeven = false,
                             useRuleEight = false,
-                            useRuleNine = false,
                         )
                         if (viableMove != null) {
                             return (viableMove)
@@ -136,7 +134,7 @@ class SolitaireSolver {
         val validColumnsIndexes = columns.getColumnsIndexesWithAceOrTwo()
         if (validColumnsIndexes.isNotEmpty()) {
             for (i in validColumnsIndexes) {
-                val viableMove = getViableMove(columns.getBottomList()[i][columns.getCardIndexOfAceOrTwoUpcard(i)],false, false, false, false, false, false )
+                val viableMove = getViableMove(columns.getBottomList()[i][columns.getCardIndexOfAceOrTwoUpcard(i)],false, false, false, false, false)
                 if (viableMove != null) {
                     return (viableMove)
                 }
@@ -151,7 +149,7 @@ class SolitaireSolver {
         val viableMoves: MutableList<MutableList<Card?>?> = mutableListOf()
         if (validColumns.isNotEmpty()) {
             for (i in validColumns) {
-                val viableMove = getViableMove(columns.getBottomList()[i][columns.getCardIndexOfFirstUpcard(i)],false, false, false, false, false, false )
+                val viableMove = getViableMove(columns.getBottomList()[i][columns.getCardIndexOfFirstUpcard(i)],false, false, false, false, false)
                 if (viableMove != null) {
                     viableMoves.add(viableMove)
                 }
@@ -345,7 +343,6 @@ class SolitaireSolver {
                         useRuleSix = true,
                         useRuleSeven = true,
                         useRuleEight = true,
-                        useRuleNine = true,
                     )
                     if (viableMove != null){
                         if (viableMove[0]?.let { freesDowncard(it, 1) } != null){
@@ -362,7 +359,7 @@ class SolitaireSolver {
     //first index: from
     //second index: to
     //null in return list means an empty column
-    private fun getViableMove(card: Card, useRuleFour: Boolean, useRuleFive: Boolean, useRuleSix: Boolean, useRuleSeven: Boolean, useRuleEight: Boolean, useRuleNine: Boolean): MutableList<Card?>? {
+    private fun getViableMove(card: Card, useRuleFour: Boolean, useRuleFive: Boolean, useRuleSix: Boolean, useRuleSeven: Boolean, useRuleEight: Boolean): MutableList<Card?>? {
         val bottomColumns = columns.getBottomList()
         val topColumns = columns.getTopList()
         var ownColumn: Boolean
