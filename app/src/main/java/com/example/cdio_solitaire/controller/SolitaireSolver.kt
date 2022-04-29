@@ -16,6 +16,12 @@ class SolitaireSolver {
         columns.addToBottomList(list, columnIndex)
     }
 
+
+    fun setupRandomGame(){
+
+    }
+
+
     fun printList(){
         for (i in columns.getBottomList()){
             var string = "["

@@ -235,25 +235,39 @@ class SolutionUnitTest {
     }
 
 
+    //does 100.000 random playsets of random cards and sees how many can be solved using the solver.
+    //based on almost nothing, we determine that the algorithm should have a solution at least 50% of the time
+    //cards are completely random, and CAN have duplicates, which isn't ideal but its what we have.
+    //Results are VERY interesting. apparently its almost always works around 87% of the times no matter how many times its run, AND 85% of the time its within the algorithm rulings.
     @Test
     fun solution(){
-        val solitaireSolver = SolitaireSolver()
-        val bottom_column1: MutableList<Card> = mutableListOf(Card(9, "D", false))
-        val bottom_column2: MutableList<Card> = mutableListOf(Card(3, "C", false), Card(null, null, true))
-        val bottom_column3: MutableList<Card> = mutableListOf(Card(11, "D", false), Card(null, null, true), Card(null, null, true))
-        val bottom_column4: MutableList<Card> = mutableListOf(Card(4, "S", false), Card(null, null, true), Card(null, null, true), Card(null, null, true))
-        val bottom_column5: MutableList<Card> = mutableListOf(Card(13, "D", false), Card(null, null, true), Card(null, null, true),Card(null, null, true), Card(null, null, true))
-        val bottom_column6: MutableList<Card> = mutableListOf(Card(2, "D", false), Card(null, null, true), Card(8, "S", true),Card(null, null, true),Card(null, null, true),Card(null, null, true))
-        val bottom_column7: MutableList<Card> = mutableListOf(Card(5, "D", false), Card(null, null, true),Card(null, null, true),Card(null, null, true),Card(null, null, true),Card(null, null, true),Card(null, null, true))
+        var solutions = 0
+        val suits = listOf("S", "C", "H", "D")
+        for (i in 1..100000) {
+            val solitaireSolver = SolitaireSolver()
+            val bottom_column1: MutableList<Card> = mutableListOf(Card((0..10).random(), suits[(0..3).random()], false))
+            val bottom_column2: MutableList<Card> = mutableListOf(Card((0..10).random(), suits[(0..3).random()], false), Card((0..10).random(), suits[(0..3).random()], true))
+            val bottom_column3: MutableList<Card> = mutableListOf(Card((0..10).random(), suits[(0..3).random()], false), Card((0..10).random(), suits[(0..3).random()], true), Card((0..10).random(), suits[(0..3).random()], true) )
+            val bottom_column4: MutableList<Card> = mutableListOf(Card((0..10).random(), suits[(0..3).random()], false), Card((0..10).random(), suits[(0..3).random()], true) , Card((0..10).random(), suits[(0..3).random()], true) , Card((0..10).random(), suits[(0..3).random()], true) )
+            val bottom_column5: MutableList<Card> = mutableListOf(Card((0..10).random(), suits[(0..3).random()], false), Card((0..10).random(), suits[(0..3).random()], true) , Card((0..10).random(), suits[(0..3).random()], true) , Card((0..10).random(), suits[(0..3).random()], true) , Card((0..10).random(), suits[(0..3).random()], true) )
+            val bottom_column6: MutableList<Card> = mutableListOf(Card((0..10).random(), suits[(0..3).random()], false), Card((0..10).random(), suits[(0..3).random()], true) , Card((0..10).random(), suits[(0..3).random()], true) , Card((0..10).random(), suits[(0..3).random()], true) , Card((0..10).random(), suits[(0..3).random()], true) , Card((0..10).random(), suits[(0..3).random()], true) )
+            val bottom_column7: MutableList<Card> = mutableListOf(Card((0..10).random(), suits[(0..3).random()], false), Card((0..10).random(), suits[(0..3).random()], true) , Card((0..10).random(), suits[(0..3).random()], true) , Card((0..10).random(), suits[(0..3).random()], true) , Card((0..10).random(), suits[(0..3).random()], true) , Card((0..10).random(), suits[(0..3).random()], true) , Card((0..10).random(), suits[(0..3).random()], true) )
 
-        solitaireSolver.addCards(bottom_column1, 0)
-        solitaireSolver.addCards(bottom_column2, 1)
-        solitaireSolver.addCards(bottom_column3, 2)
-        solitaireSolver.addCards(bottom_column4, 3)
-        solitaireSolver.addCards(bottom_column5, 4)
-        solitaireSolver.addCards(bottom_column6, 5)
-        solitaireSolver.addCards(bottom_column7, 6)
 
-        solitaireSolver.printSolution()
+            solitaireSolver.addCards(bottom_column1, 0)
+            solitaireSolver.addCards(bottom_column2, 1)
+            solitaireSolver.addCards(bottom_column3, 2)
+            solitaireSolver.addCards(bottom_column4, 3)
+            solitaireSolver.addCards(bottom_column5, 4)
+            solitaireSolver.addCards(bottom_column6, 5)
+            solitaireSolver.addCards(bottom_column7, 6)
+
+            if (solitaireSolver.solve() != null){
+                solutions++
+            }
+        }
+        //println(solutions)
+
+        assertEquals(solutions > 50000, true)
     }
 }
