@@ -190,18 +190,18 @@ class SolitaireSolver {
     }
 
     //function returns true if rule four has not been violated, given a solution
-    private fun ruleFour(solution: List<Card?>): Boolean {
+    fun ruleFour(solution: List<Card?>): Boolean {
         if (columns.columnHasBackrow(columns.getColumnsIndexOfCard(solution[0]!!)!!)) {
             return true
         }
-        val firstColumnSize = columns.getColumnSize(columns.getColumnsIndexOfCard(solution[1]!!)!!)
+        val firstColumnSize = columns.getColumnSize(columns.getColumnsIndexOfCard(solution[0]!!)!!)
         var secondColumnSize = 0
         if (solution[1] != null){
             secondColumnSize = columns.getColumnSize(columns.getColumnsIndexOfCard(solution[1]!!)!!)
         }
 
         val difference = firstColumnSize- secondColumnSize
-        if (difference != 1 && difference != -1 && difference == 0) {
+        if (difference > 1) {
             return true
         }
         return false
