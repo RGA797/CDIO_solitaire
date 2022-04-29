@@ -235,7 +235,6 @@ class SolutionUnitTest {
     }
 
 
-
     @Test
     fun solution(){
         val solitaireSolver = SolitaireSolver()
