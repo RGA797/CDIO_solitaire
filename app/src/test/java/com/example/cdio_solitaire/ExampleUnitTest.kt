@@ -195,7 +195,43 @@ class SolutionUnitTest {
 
     @Test
     fun rule_Eight(){
-        //todo
+        val solitaireSolver = SolitaireSolver()
+        val bottom_column1: MutableList<Card> = mutableListOf(Card(7, "S", false), Card(null, null, false))
+        val bottom_column2: MutableList<Card> = mutableListOf(Card(8, "H", false), Card(null, null, false))
+        val bottom_column3: MutableList<Card> = mutableListOf(Card(12, "S", false), Card(null, null, true))
+        val bottom_column4: MutableList<Card> = mutableListOf(Card(9, "H", false), Card(null, null, true))
+        val bottom_column5: MutableList<Card> = mutableListOf(Card(13, "H", false))
+        val bottom_column6: MutableList<Card> = mutableListOf(Card(11, "H", false))
+        val bottom_column7: MutableList<Card> = mutableListOf(Card(12, "H", false))
+        mutableListOf(Card(13, "H", false), Card(8, "S", true))
+
+        solitaireSolver.addCards(bottom_column1, 0)
+        solitaireSolver.addCards(bottom_column2, 1)
+        solitaireSolver.addCards(bottom_column3, 2)
+        solitaireSolver.addCards(bottom_column4, 3)
+        solitaireSolver.addCards(bottom_column5, 4)
+        solitaireSolver.addCards(bottom_column6, 5)
+        solitaireSolver.addCards(bottom_column7, 6)
+
+        val solution1: MutableList<Card?> = mutableListOf(Card(7, "S", false),Card(8, "H", false))
+        val solution2: MutableList<Card?> = mutableListOf(Card(12, "S", false),Card(13, "H", false))
+
+        //solution 1, and its the only solution
+        var bottomSolutions:MutableList<MutableList<Card?>?> = mutableListOf(solution1)
+        assertEquals(solitaireSolver.ruleEight(solution1, bottomSolutions), true)
+
+        //solution 1, but there exists another
+        bottomSolutions = mutableListOf(solution1, solution2)
+        assertEquals(solitaireSolver.ruleEight(solution1, bottomSolutions), false)
+
+
+        //solution 2, and there exists another
+        bottomSolutions = mutableListOf(solution1, solution2)
+        assertEquals(solitaireSolver.ruleEight(solution2, bottomSolutions), true)
+
+        //null solution
+        bottomSolutions = mutableListOf(null)
+        assertEquals(solitaireSolver.ruleEight(null, bottomSolutions), false)
     }
 
 

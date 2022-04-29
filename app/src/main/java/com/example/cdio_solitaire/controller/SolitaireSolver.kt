@@ -282,8 +282,9 @@ class SolitaireSolver {
 
         return false
     }
-    //takes a solution and returns true if it does not violate rule 8
-    fun ruleEight(solution: List<Card?>?): Boolean{
+
+    //takes a specific solution and its list, and returns true if it does not violate rule 8
+    fun ruleEight(solution: List<Card?>?, solutionList: MutableList<MutableList<Card?>?>): Boolean{
         if (solution != null){
             if (solution[0]!!.rank  != 5 && solution[0]!!.rank != 6 &&  solution[0]!!.rank  != 7  && solution[0]!!.rank  != 8){
                 return true
@@ -296,24 +297,29 @@ class SolitaireSolver {
 
             //if no other choice exists you have to accept
             var otherChoise = false
-            for (i in bottomSolutions.indices){
-                if (bottomSolutions[i] != null){
-
+            for (i in solutionList.indices) {
+                if (solutionList[i] != null) {
                     //if card moving from is different than given solution
-                    if (bottomSolutions[i]?.get(0)?.rank  != solution[0]?.rank || bottomSolutions[i]?.get(0)?.suit  != solution[0]?.suit) {
+                    if (solutionList[i]?.get(0)?.rank != solution[0]?.rank || solutionList[i]?.get(
+                            0
+                        )?.suit != solution[0]?.suit
+                    ) {
                         otherChoise = true
                     }
 
                     //if card moving to is different than given solution
-                    if (bottomSolutions[i]?.get(1)?.rank  != solution[1]?.rank || bottomSolutions[i]?.get(1)?.suit  != solution[1]?.suit){
+                    if (solutionList[i]?.get(1)?.rank != solution[1]?.rank || solutionList[i]?.get(
+                            1
+                        )?.suit != solution[1]?.suit
+                    ) {
                         otherChoise = true
                     }
                 }
             }
-            if (!otherChoise){
+            if (!otherChoise) {
                 return true
+            }
         }
-    }
 
         return false
     }
@@ -512,7 +518,7 @@ class SolitaireSolver {
             for (i in bottomSolutions.indices) {
                 if (bottomSolutions[i] != null) {
                     if (bottomSolutions[i]?.get(0)?.rank == 13) {
-                        if (!bottomSolutions[i]?.let { ruleEight(it) }!!) {
+                        if (!bottomSolutions[i]?.let { ruleEight(it, bottomSolutions) }!!) {
                             bottomSolutions[i] = null
                         }
                     }
