@@ -84,7 +84,7 @@ class SolitaireSolver {
         return null
     }
 
-    //returns a move that involves ace or two
+    //returns a move that obeys rule 3-8
     private fun generalSolution(): List<Card?>? {
         val bottomList = columns.getBottomList()
         if (bottomList.isNotEmpty()) {

@@ -266,7 +266,7 @@ class SolutionUnitTest {
                 solutions++
             }
         }
-        //println(solutions)
+        println(solutions)
 
         assertEquals(solutions > 50000, true)
     }
