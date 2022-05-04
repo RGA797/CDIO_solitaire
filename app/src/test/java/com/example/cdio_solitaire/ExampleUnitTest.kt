@@ -224,7 +224,6 @@ class SolutionUnitTest {
         bottomSolutions = mutableListOf(solution1, solution2)
         assertEquals(solitaireSolver.ruleEight(solution1, bottomSolutions), false)
 
-
         //solution 2, and there exists another
         bottomSolutions = mutableListOf(solution1, solution2)
         assertEquals(solitaireSolver.ruleEight(solution2, bottomSolutions), true)

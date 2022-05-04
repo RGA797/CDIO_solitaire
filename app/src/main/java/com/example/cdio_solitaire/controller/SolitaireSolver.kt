@@ -330,6 +330,31 @@ class SolitaireSolver {
         return false
     }
 
+    private fun ruleNine(bottomSolutions: MutableList<MutableList<Card?>?>, topSolutions: MutableList<MutableList<Card?>?>): MutableList<Card?>?{
+        //if given a choice(bottom solution), use rule 3
+        if (bottomSolutions.size > 1){
+            return ruleThree(bottomSolutions)
+        }
+
+        //if only one choice. return it
+        if (bottomSolutions.size == 1){
+            return bottomSolutions[0]
+        }
+
+        //if given a choice (top solution), use rule 3
+        if (topSolutions.size > 1){
+            return ruleThree(topSolutions)
+        }
+
+        //if only one choice. return it
+        if (topSolutions.size == 1){
+            return bottomSolutions[0]
+        }
+
+        //if no solutions at all. return null
+        return null
+    }
+
 
     //returns true if a given card frees a downcard if moved. cardIndex needed
     private fun freesDowncard(card: Card, cardIndex: Int): Boolean {
@@ -542,28 +567,7 @@ class SolitaireSolver {
 
         //the order in which solutions are given as the "optimal play", is decided to be bottom solutions before top solutions
 
-        //if given a choice(bottom solution), use rule 3
-        if (bottomSolutions.size > 1){
-            return ruleThree(bottomSolutions)
-        }
-
-        //if only one choice. return it
-        if (bottomSolutions.size == 1){
-            return bottomSolutions[0]
-        }
-
-        //if given a choice (top solution), use rule 3
-        if (topSolutions.size > 1){
-            return ruleThree(topSolutions)
-        }
-
-        //if only one choice. return it
-        if (topSolutions.size == 1){
-            return bottomSolutions[0]
-        }
-
-        //if no solutions at all. return null
-        return null
+     return ruleNine(bottomSolutions, topSolutions)
     }
 
     //returns true if given a move that CAN be made ALSO doesnt violate the algorithms conditional rules
