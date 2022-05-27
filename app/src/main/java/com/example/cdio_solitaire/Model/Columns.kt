@@ -36,6 +36,14 @@ class Columns() {
         public fun getBottomList(): List<List<Card>> {
                 return bottomList
         }
+        //given a list of cards, adds every card into given column index of top list
+        fun addToTopList(list: List<Card>, columnIndex: Int){
+                var number = 0
+                while (number <list.size){
+                        topList[columnIndex].add(list[number])
+                        number++
+                }
+        }
 
         //returns top list
         public fun getTopList(): List<List<Card>> {

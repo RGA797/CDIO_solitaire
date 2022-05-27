@@ -16,6 +16,11 @@ class SolitaireSolver {
         columns.addToBottomList(list, columnIndex)
     }
 
+    //adds every element of a list of cards to top column
+    fun addTopCards (list: List<Card>, columnIndex: Int){
+        columns.addToTopList(list, columnIndex)
+    }
+
 
     fun setupRandomGame(){
 
