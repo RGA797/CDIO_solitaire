@@ -21,12 +21,6 @@ class SolitaireSolver {
         columns.addToTopList(rank, suit, isDowncard, columnIndex)
     }
 
-
-    fun setupRandomGame(){
-
-    }
-
-
     fun printList(){
         for (i in columns.getBottomList()){
             var string = "["
