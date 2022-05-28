@@ -41,6 +41,8 @@ class SolutionUnitTest {
         val bottom_column6: MutableList<Card> = mutableListOf(Card(11, "H", false))
         val bottom_column7: MutableList<Card> = mutableListOf(Card(13, "H", false), Card(8, "S", true))
 
+
+
         addBottomCards(solitaireSolver, bottom_column1, 0)
         addBottomCards(solitaireSolver, bottom_column2, 1)
         addBottomCards(solitaireSolver, bottom_column3, 2)
@@ -51,9 +53,35 @@ class SolutionUnitTest {
 
         solitaireSolver.printList()
     }
+    @Test
+    fun rule_one(){
+        val solitaireSolver = SolitaireSolver()
+        val bottom_column1: MutableList<Card> = mutableListOf(Card(1, "S", false))
+        val bottom_column2: MutableList<Card> = mutableListOf(Card(9, "H", false))
+        val bottom_column3: MutableList<Card> = mutableListOf(Card(4, "H", false))
+        val bottom_column4: MutableList<Card> = mutableListOf(Card(3, "H", false))
+        val bottom_column5: MutableList<Card> = mutableListOf(Card(7, "H", false))
+        val bottom_column6: MutableList<Card> = mutableListOf(Card(11, "H", false))
+        val bottom_column7: MutableList<Card> = mutableListOf(Card(13, "H", false), Card(8, "S", true))
+
+        val top_column1: MutableList<Card> = mutableListOf(Card(12, "H", false))
+
+        addBottomCards(solitaireSolver, bottom_column1, 0)
+        addBottomCards(solitaireSolver, bottom_column2, 1)
+        addBottomCards(solitaireSolver, bottom_column3, 2)
+        addBottomCards(solitaireSolver, bottom_column4, 3)
+        addBottomCards(solitaireSolver, bottom_column5, 4)
+        addBottomCards(solitaireSolver, bottom_column6, 5)
+        addBottomCards(solitaireSolver, bottom_column7, 6)
+        addBottomCards(solitaireSolver, bottom_column7, 6)
+
+        addTopCards(solitaireSolver, top_column1, 0)
+
+        solitaireSolver.printSolution()
+    }
 
     @Test
-    fun rule_one_two(){
+    fun rule_two(){
         val solitaireSolver = SolitaireSolver()
         val bottom_column1: MutableList<Card> = mutableListOf(Card(6, "S", false))
         val bottom_column2: MutableList<Card> = mutableListOf(Card(9, "H", false))
@@ -63,6 +91,8 @@ class SolutionUnitTest {
         val bottom_column6: MutableList<Card> = mutableListOf(Card(11, "H", false))
         val bottom_column7: MutableList<Card> = mutableListOf(Card(13, "H", false), Card(8, "S", true))
 
+        val top_column1: MutableList<Card> = mutableListOf(Card(12, "H", false))
+
         addBottomCards(solitaireSolver, bottom_column1, 0)
         addBottomCards(solitaireSolver, bottom_column2, 1)
         addBottomCards(solitaireSolver, bottom_column3, 2)
@@ -70,6 +100,9 @@ class SolutionUnitTest {
         addBottomCards(solitaireSolver, bottom_column5, 4)
         addBottomCards(solitaireSolver, bottom_column6, 5)
         addBottomCards(solitaireSolver, bottom_column7, 6)
+        addBottomCards(solitaireSolver, bottom_column7, 6)
+
+        addTopCards(solitaireSolver, top_column1, 0)
 
         solitaireSolver.printSolution()
     }
