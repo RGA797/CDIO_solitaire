@@ -11,14 +11,14 @@ class SolitaireSolver {
     private var bottomSolutions: MutableList<MutableList<Card?>?> = mutableListOf()
     private var topSolutions: MutableList<MutableList<Card?>?> = mutableListOf()
 
-    //adds every element of a list of cards to bottom column
-    fun addCards (list: List<Card>, columnIndex: Int){
-        columns.addToBottomList(list, columnIndex)
+    //adds one card to bottom column at index
+    fun addBottomCard (rank: Int?, suit: String?, isDowncard: Boolean, columnIndex: Int){
+        columns.addToBottomList(rank, suit, isDowncard, columnIndex)
     }
 
-    //adds every element of a list of cards to top column
-    fun addTopCards (list: List<Card>, columnIndex: Int){
-        columns.addToTopList(list, columnIndex)
+    //adds one card to top column at index
+    fun addTopCard (rank: Int?, suit: String?, isDowncard: Boolean, columnIndex: Int){
+        columns.addToTopList(rank, suit, isDowncard, columnIndex)
     }
 
 
@@ -353,7 +353,7 @@ class SolitaireSolver {
 
         //if only one choice. return it
         if (topSolutions.size == 1){
-            return bottomSolutions[0]
+            return topSolutions[0]
         }
 
         //if no solutions at all. return null
@@ -515,7 +515,7 @@ class SolitaireSolver {
                 if (topSolutions.isNotEmpty()) {
                     for (i in topSolutions.indices) {
                         if (!ruleSeven(topSolutions[i])) {
-                            bottomSolutions.removeAt(i)
+                            topSolutions.removeAt(i)
                         }
                     }
                 }

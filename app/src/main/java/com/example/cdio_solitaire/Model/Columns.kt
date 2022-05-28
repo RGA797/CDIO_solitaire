@@ -24,12 +24,8 @@ class Columns() {
         private val bottomList:List<MutableList<Card>> = listOf(bottom_column1,bottom_column2,bottom_column3,bottom_column4,bottom_column5,bottom_column6,bottom_column7)
 
         //given a list of cards, adds every card into given column index of bottom list
-        fun addToBottomList(list: List<Card>, columnIndex: Int){
-                var number = 0
-                while (number <list.size){
-                        bottomList[columnIndex].add(list[number])
-                        number++
-                }
+        fun addToBottomList(rank: Int?, suit: String?, isDowncard: Boolean, columnIndex: Int){
+                bottomList[columnIndex].add(Card(rank,suit, isDowncard))
         }
 
         //returns bottom list
@@ -37,12 +33,8 @@ class Columns() {
                 return bottomList
         }
         //given a list of cards, adds every card into given column index of top list
-        fun addToTopList(list: List<Card>, columnIndex: Int){
-                var number = 0
-                while (number <list.size){
-                        topList[columnIndex].add(list[number])
-                        number++
-                }
+        fun addToTopList(rank: Int?, suit: String?, isDowncard: Boolean, columnIndex: Int){
+                topList[columnIndex].add(Card(rank,suit, isDowncard))
         }
 
         //returns top list
