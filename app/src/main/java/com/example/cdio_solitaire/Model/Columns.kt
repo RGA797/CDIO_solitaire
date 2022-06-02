@@ -35,6 +35,27 @@ class Columns() {
                 talon = Card(rank, suit, false)
         }
 
+        fun getCardsInBotAndTop(): Int{
+                var number = 0
+
+                for (list in bottomList){
+                        for(card in list){
+                                number ++
+                        }
+                }
+
+                for (list in topList){
+                        for(card in list){
+                                number ++
+                        }
+                }
+                return number
+        }
+
+        fun getTalonCard(): Card{
+                return talon
+        }
+
         //returns bottom list
         public fun getBottomList(): List<List<Card>> {
                 return bottomList

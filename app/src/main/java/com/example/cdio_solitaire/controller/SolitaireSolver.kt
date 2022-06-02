@@ -21,6 +21,14 @@ class SolitaireSolver {
         columns.addToTopList(rank, suit, isDowncard, columnIndex)
     }
 
+    fun getNumberOfCardsInBotAndTop(): Int {
+        return columns.getCardsInBotAndTop()
+    }
+
+    fun updateTalon(rank: Int?, suit: String?) {
+        columns.updateTalon(rank, suit)
+    }
+
     fun printList(){
         for (i in columns.getBottomList()){
             var string = "["
@@ -46,13 +54,26 @@ class SolitaireSolver {
                 println("solution!: " + solution[0]!!.rank + solution[0]!!.suit + " to an empty column")
             }
         }
+
         else{
-            println("no solution found!" )
+            val cardsInBotAndTop = getNumberOfCardsInBotAndTop()
+            if (cardsInBotAndTop == 47 || cardsInBotAndTop == 48){
+                println("no solution found! if 2 cards in talon reset stock and redraw 3" )
+                return
+            }
+
+            if (cardsInBotAndTop > 48){
+                println("no solution found! game over")
+                return
+            }
+
+            println("no solution found! Draw 3 from stock into talon" )
         }
     }
 
     //solution algorithm. follows rules of the mentioned article
     fun solve(): List<Card?>? {
+        val cardsInBotAndTop = getNumberOfCardsInBotAndTop()
 
         //if a solution exists that follows rule 1, return it
         var solution = ruleOne()
@@ -79,8 +100,48 @@ class SolitaireSolver {
             return solution
         }
 
+
+            solution = talonSolution()
+            if (solution != null) {
+                return solution
+            }
+
+
         //if no valid moves whatsoever, return null
         return null
+    }
+
+    private fun talonSolution(): List<Card?>?{
+
+        val talonCard = columns.getTalonCard()
+
+        if (talonCard.rank == null || talonCard.suit == null){
+            return null
+        }
+
+        var viableMove = getViableMove(
+            talonCard,
+            useRuleFour = true,
+            useRuleFive = true,
+            useRuleSix = true,
+            useRuleSeven = true,
+            useRuleEight = true,
+        )
+
+        if (viableMove != null) {
+            return viableMove
+        }
+
+        viableMove = getViableMove(
+            talonCard,
+            useRuleFour = false,
+            useRuleFive = false,
+            useRuleSix = false,
+            useRuleSeven = false,
+            useRuleEight = false,
+        )
+
+        return viableMove
     }
 
     //returns a move that obeys rule 4-8
@@ -172,6 +233,7 @@ class SolitaireSolver {
         }
         return null
     }
+
 
     //given a list of solutions, ruleThree returns the one which involves the collumn with biggest number
     //of downcards
