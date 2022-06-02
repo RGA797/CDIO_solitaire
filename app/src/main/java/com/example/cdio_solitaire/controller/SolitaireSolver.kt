@@ -121,7 +121,7 @@ class SolitaireSolver {
 
         var viableMove = getViableMove(
             talonCard,
-            useRuleFour = true,
+            useRuleFour = false,
             useRuleFive = true,
             useRuleSix = true,
             useRuleSeven = true,
