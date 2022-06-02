@@ -19,6 +19,9 @@ class Columns() {
         private val top_column3: MutableList<Card> = mutableListOf()
         private val top_column4: MutableList<Card> = mutableListOf()
 
+        //talon
+        private var talon: Card = Card(null,null,false)
+
         //lists
         private val topList: List<MutableList<Card>> = listOf(top_column1,top_column2,top_column3,top_column4)
         private val bottomList:List<MutableList<Card>> = listOf(bottom_column1,bottom_column2,bottom_column3,bottom_column4,bottom_column5,bottom_column6,bottom_column7)
@@ -26,6 +29,10 @@ class Columns() {
         //given a list of cards, adds every card into given column index of bottom list
         fun addToBottomList(rank: Int?, suit: String?, isDowncard: Boolean, columnIndex: Int){
                 bottomList[columnIndex].add(Card(rank,suit, isDowncard))
+        }
+
+        fun updateTalon(rank: Int?, suit: String?){
+                talon = Card(rank, suit, false)
         }
 
         //returns bottom list

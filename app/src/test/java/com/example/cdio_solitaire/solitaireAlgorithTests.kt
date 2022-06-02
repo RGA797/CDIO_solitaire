@@ -6,11 +6,6 @@ import org.junit.Test
 
 import org.junit.Assert.*
 
-/**
- * Example local unit test, which will execute on the development machine (host).
- *
- * See [testing documentation](http://d.android.com/tools/testing).
- */
 class SolutionUnitTest {
 
     //function for adding cards. only the solitaire solver would know card objects, so for testing purposes we use mutable lists of cards but add them per column without expressing it as such in the function addCards (meaning we are staying coherent).
@@ -332,4 +327,15 @@ class SolutionUnitTest {
 
         assertEquals(solutions > 50000, true)
     }
+
+    @Test
+    fun contest(){
+            val solitaireSolver = SolitaireSolver()
+
+            //println(solutions)
+
+
+
+    }
+
 }
