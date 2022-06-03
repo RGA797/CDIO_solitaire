@@ -72,7 +72,7 @@ class SolutionUnitTest {
 
         addTopCards(solitaireSolver, top_column1, 0)
 
-        solitaireSolver.printSolution()
+        solitaireSolver.printSolution(solitaireSolver.solve())
     }
 
     @Test
@@ -99,7 +99,7 @@ class SolutionUnitTest {
 
         addTopCards(solitaireSolver, top_column1, 0)
 
-        solitaireSolver.printSolution()
+        solitaireSolver.printSolution(solitaireSolver.solve())
     }
 
     @Test
@@ -347,7 +347,6 @@ class SolutionUnitTest {
         addBottomCards(solitaireSolver, bottom_column6, 5)
         addBottomCards(solitaireSolver, bottom_column7, 6)
 
-
         val top_column1: MutableList<Card> = mutableListOf(Card(1, "S", false))
         val top_column2: MutableList<Card> = mutableListOf(Card(2, "C", false),Card(1, "C", false))
         val top_column3: MutableList<Card> = mutableListOf(Card(3, "D", false),Card(2, "D", false),Card(1, "D", false))
@@ -360,7 +359,7 @@ class SolutionUnitTest {
 
         solitaireSolver.updateTalon(12,"S")
 
-        solitaireSolver.printSolution()
+        solitaireSolver.printSolution(solitaireSolver.solve())
     }
 
 }

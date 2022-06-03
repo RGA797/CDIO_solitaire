@@ -44,36 +44,34 @@ class SolitaireSolver {
     }
 
     //prints the solution the algorithm has found
-    fun printSolution(){
-        val solution = solve()
+    fun printSolution(solution: List<Card?>?){
         if (solution != null){
             if (solution[1] != null){
-                println("solution!: " + solution[0]!!.rank + solution[0]!!.suit + " to " + solution[1]!!.rank + solution[1]!!.suit )
+                println("" + solution[0]!!.rank + solution[0]!!.suit + " to " + solution[1]!!.rank + solution[1]!!.suit )
             }
             else{
-                println("solution!: " + solution[0]!!.rank + solution[0]!!.suit + " to an empty column")
+                println("" + solution[0]!!.rank + solution[0]!!.suit + " to an empty column")
             }
         }
 
         else{
             val cardsInBotAndTop = getNumberOfCardsInBotAndTop()
             if (cardsInBotAndTop == 47 || cardsInBotAndTop == 48){
-                println("no solution found! if 2 cards in talon reset stock and redraw 3" )
+                println("if 2 cards in talon reset stock and redraw 3, otherwise game over" )
                 return
             }
 
             if (cardsInBotAndTop > 48){
-                println("no solution found! game over")
+                println("game over")
                 return
             }
 
-            println("no solution found! Draw 3 from stock into talon" )
+            println("Draw 3 from stock into talon. reset stock if needed" )
         }
     }
 
     //solution algorithm. follows rules of the mentioned article
     fun solve(): List<Card?>? {
-        val cardsInBotAndTop = getNumberOfCardsInBotAndTop()
 
         //if a solution exists that follows rule 1, return it
         var solution = ruleOne()
@@ -100,12 +98,10 @@ class SolitaireSolver {
             return solution
         }
 
-
             solution = talonSolution()
             if (solution != null) {
                 return solution
             }
-
 
         //if no valid moves whatsoever, return null
         return null
