@@ -111,8 +111,8 @@ class SolitaireSolver {
         return null
     }
 
+    //returns a move for a talon card
     private fun talonSolution(): List<Card?>?{
-
         val talonCard = columns.getTalonCard()
 
         if (talonCard.rank == null || talonCard.suit == null){
@@ -122,24 +122,15 @@ class SolitaireSolver {
         var viableMove = getViableMove(
             talonCard,
             useRuleFour = false,
-            useRuleFive = true,
-            useRuleSix = true,
-            useRuleSeven = true,
-            useRuleEight = true,
-        )
-
-        if (viableMove != null) {
-            return viableMove
-        }
-
-        viableMove = getViableMove(
-            talonCard,
-            useRuleFour = false,
             useRuleFive = false,
             useRuleSix = false,
             useRuleSeven = false,
             useRuleEight = false,
         )
+
+        if (viableMove != null) {
+            return viableMove
+        }
 
         return viableMove
     }

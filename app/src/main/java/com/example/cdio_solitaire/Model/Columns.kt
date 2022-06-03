@@ -31,6 +31,7 @@ class Columns() {
                 bottomList[columnIndex].add(Card(rank,suit, isDowncard))
         }
 
+        //updates current talon card
         fun updateTalon(rank: Int?, suit: String?){
                 talon = Card(rank, suit, false)
         }
