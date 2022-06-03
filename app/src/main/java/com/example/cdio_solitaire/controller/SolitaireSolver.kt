@@ -57,7 +57,7 @@ class SolitaireSolver {
         else{
             val cardsInBotAndTop = getNumberOfCardsInBotAndTop()
             if (cardsInBotAndTop == 47 || cardsInBotAndTop == 48){
-                println("if 2 cards in talon reset stock and redraw 3, otherwise game over" )
+                println("if 2/3 cards in talon reset stock and redraw 3, otherwise game over" )
                 return
             }
 
