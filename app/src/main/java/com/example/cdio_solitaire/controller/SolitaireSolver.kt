@@ -37,7 +37,7 @@ class SolitaireSolver {
                     string = string + "{" + j.rank + ", " + j.suit + "}" + ","
                 }
             }
-            string.dropLast(2)
+            string = string.dropLast(1)
             string = "$string]"
             println(string)
         }
