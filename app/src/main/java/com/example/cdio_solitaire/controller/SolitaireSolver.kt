@@ -45,27 +45,33 @@ class SolitaireSolver {
 
     //prints the solution the algorithm has found
     fun printSolution(solution: List<Card?>?){
+        var columnSpecification = ""
         if (solution != null){
             if (solution[1] != null){
-                println("" + solution[0]!!.rank + solution[0]!!.suit + " to " + solution[1]!!.rank + solution[1]!!.suit )
+                println("" + solution[0]!!.rank + solution[0]!!.suit + " to " + solution[1]!!.rank + solution[1]!!.suit)
             }
             else{
-                println("" + solution[0]!!.rank + solution[0]!!.suit + " to an empty column")
+                if (solution[0]?.rank == 13) {
+                    columnSpecification = "bottom column!"
+                }
+                if (solution[0]?.rank == 1) {
+                    columnSpecification = "top column!"
+                }
+                println("" + solution[0]!!.rank + solution[0]!!.suit + " to an empty " + columnSpecification)
             }
         }
 
         else{
             val cardsInBotAndTop = getNumberOfCardsInBotAndTop()
             if (cardsInBotAndTop == 47 || cardsInBotAndTop == 48){
-                println("if 2/3 cards in talon reset stock and redraw 3, otherwise game over" )
+                println("if 2 or 3 cards in talon, reset stock and redraw 3, otherwise game over" )
                 return
             }
 
             if (cardsInBotAndTop > 48){
-                println("game over")
+                println("if talon card cannot be moved, game over")
                 return
             }
-
             println("Draw 3 from stock into talon. reset stock if needed" )
         }
     }
