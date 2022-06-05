@@ -63,17 +63,57 @@ class SolitaireSolver {
 
         else{
             val cardsInBotAndTop = getNumberOfCardsInBotAndTop()
-            if (cardsInBotAndTop == 47 || cardsInBotAndTop == 48){
-                println("if 2 or 3 cards in talon, reset stock and redraw 3, otherwise game over" )
-                return
-            }
 
             if (cardsInBotAndTop > 48){
                 println("if talon card cannot be moved, game over")
                 return
             }
-            println("Draw 3 from stock into talon. reset stock if needed" )
+            else {
+                println("reset stock then Draw 3 from stock into talon.")
+            }
         }
+    }
+
+    fun printContestSolution(solution: List<Card?>?){
+        val cardsInBotAndTop = getNumberOfCardsInBotAndTop()
+        if (solution != null) {
+            if (solution[1] != null) {
+                var columnIndex = columns.getColumnsIndexOfCard(solution[1]!!)
+                if (columnIndex != null) {
+                    println("" + solution[0]!!.rank + solution[0]!!.suit + "-" + (columnIndex + 1))
+                }
+                if (columnIndex == null) {
+                    println("" + solution[0]!!.rank + solution[0]!!.suit + "-F")
+                }
+            }
+            else{
+                if (solution[0]!!.rank == 13) {
+                    var columnIndex = 1
+                    for (i in columns.getBottomList()){
+                        if (i.isEmpty()){
+                            break
+                        }
+                        else{
+                            columnIndex++
+                        }
+                    }
+                    println("" + solution[0]!!.rank + solution[0]!!.suit + "-" + columnIndex)
+                }
+                if (solution[0]!!.rank == 1) {
+                    println("" + solution[0]!!.rank + solution[0]!!.suit + "-" + "F")
+                }
+            }
+    }
+    else{
+            if (cardsInBotAndTop < 49) {
+                println("S")
+                println("T")
+            }
+            else{
+                println("game over")
+            }
+                return
+            }
     }
 
     //solution algorithm. follows rules of the mentioned article
