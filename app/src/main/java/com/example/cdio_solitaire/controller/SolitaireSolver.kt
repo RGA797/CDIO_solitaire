@@ -105,6 +105,7 @@ class SolitaireSolver {
             }
             if (solution[0]!!.rank == columns.getTalonCard().rank && solution[0]!!.suit == columns.getTalonCard().suit && cardsInBotAndTop < 49){
                 println("S")
+                println("T")
             }
     }
     else{
