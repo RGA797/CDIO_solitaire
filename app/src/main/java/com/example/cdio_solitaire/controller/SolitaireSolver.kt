@@ -104,14 +104,14 @@ class SolitaireSolver {
                 }
             }
             if (solution[0]!!.rank == columns.getTalonCard().rank && solution[0]!!.suit == columns.getTalonCard().suit && cardsInBotAndTop < 49){
-                println("S")
-                println("T")
+                println(",S")
+                println(",T")
             }
     }
     else{
             if (cardsInBotAndTop < 49) {
-                println("S")
-                println("T")
+                println(",S")
+                println(",T")
             }
             else{
                 println("game over")
