@@ -86,7 +86,7 @@ class SolitaireSolver {
                     println("" + solution[0]!!.rank + solution[0]!!.suit + "-F")
                 }
             }
-            else{
+            if (solution[1] == null) {
                 if (solution[0]!!.rank == 13) {
                     var columnIndex = 1
                     for (i in columns.getBottomList()){
@@ -102,6 +102,9 @@ class SolitaireSolver {
                 if (solution[0]!!.rank == 1) {
                     println("" + solution[0]!!.rank + solution[0]!!.suit + "-" + "F")
                 }
+            }
+            if (solution[0]!!.rank == columns.getTalonCard().rank && solution[0]!!.suit == columns.getTalonCard().suit){
+                println("S")
             }
     }
     else{
