@@ -103,7 +103,7 @@ class SolitaireSolver {
                     println("" + solution[0]!!.rank + solution[0]!!.suit + "-" + "F")
                 }
             }
-            if (solution[0]!!.rank == columns.getTalonCard().rank && solution[0]!!.suit == columns.getTalonCard().suit){
+            if (solution[0]!!.rank == columns.getTalonCard().rank && solution[0]!!.suit == columns.getTalonCard().suit && cardsInBotAndTop < 49){
                 println("S")
             }
     }
