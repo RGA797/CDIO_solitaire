@@ -72,7 +72,7 @@ class SolutionUnitTest {
 
         addTopCards(solitaireSolver, top_column1, 0)
 
-        solitaireSolver.printSolution(solitaireSolver.solve())
+        solitaireSolver.printContestSolution(solitaireSolver.solve())
     }
 
     @Test
@@ -99,7 +99,7 @@ class SolutionUnitTest {
 
         addTopCards(solitaireSolver, top_column1, 0)
 
-        solitaireSolver.printSolution(solitaireSolver.solve())
+        solitaireSolver.printContestSolution(solitaireSolver.solve())
     }
 
     @Test
@@ -359,7 +359,7 @@ class SolutionUnitTest {
 
         solitaireSolver.updateTalon(12,"S")
 
-        solitaireSolver.printSolution(solitaireSolver.solve())
+        solitaireSolver.printContestSolution(solitaireSolver.solve())
     }
 
 }
