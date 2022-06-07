@@ -157,10 +157,10 @@ class SolitaireSolver {
         }
 
         //if no optimal solution found, try moving any bottom card to top column
-        solution = solutionWithoutRuling()
-        if (solution != null) {
-            return solution
-        }
+        //solution = solutionWithoutRuling()
+        //if (solution != null) {
+        //    return solution
+        //}
 
             solution = talonSolution()
             if (solution != null) {
