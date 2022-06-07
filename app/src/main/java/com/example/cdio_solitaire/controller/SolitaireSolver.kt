@@ -20,14 +20,14 @@ class SolitaireSolver {
     fun addTopCard (rank: Int?, suit: String?, isDowncard: Boolean, columnIndex: Int){
         columns.addToTopList(rank, suit, isDowncard, columnIndex)
     }
-
+    fun updateTalon(rank: Int?, suit: String?) {
+        columns.updateTalon(rank, suit)
+    }
     fun getNumberOfCardsInBotAndTop(): Int {
         return columns.getCardsInBotAndTop()
     }
 
-    fun updateTalon(rank: Int?, suit: String?) {
-        columns.updateTalon(rank, suit)
-    }
+
 
     fun printList(){
         for (i in columns.getBottomList()){
@@ -76,7 +76,17 @@ class SolitaireSolver {
 
     fun printContestSolution(solution: List<Card?>?){
         val cardsInBotAndTop = getNumberOfCardsInBotAndTop()
+
+
+
         if (solution != null) {
+            if (solution[0]!!.suit == "D"){
+                solution[0]!!.suit = "R"
+            }
+
+            if (solution[0]!!.suit == "C"){
+                solution[0]!!.suit = "K"
+            }
             if (solution[1] != null) {
                 var columnIndex = columns.getColumnsIndexOfCard(solution[1]!!)
                 if (columnIndex != null) {
