@@ -591,7 +591,6 @@ class SolitaireSolver {
 
         //solution moving to top card
         for (j in topColumns) {
-
             //empty columns solutions added to list
             if (j.isEmpty()) {
                 if (isValidMove(card, null, false)) {
@@ -614,7 +613,18 @@ class SolitaireSolver {
 
             //if given card can move to a top column, add it to top solutions list
             else if (isValidMove(card, j[0], false)) {
-                topSolutions.add(mutableListOf(card, j[0]))
+                val index = columns.getColumnsIndexOfCard(card)
+                if (index != null){
+                    if (columns.getBottomList()[index][0].rank == card.rank && columns.getBottomList()[index][0].suit == card.suit){
+                        topSolutions.add(mutableListOf(card, j[0]))
+                    }
+                }
+                else{
+                    topSolutions.add(mutableListOf(card, j[0]))
+                }
+
+
+
             }
 
             //if rule seven is toggled, we go through every solution and remove them if they violate it
