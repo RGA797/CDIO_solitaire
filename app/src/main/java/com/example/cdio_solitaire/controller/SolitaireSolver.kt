@@ -90,10 +90,10 @@ class SolitaireSolver {
             if (solution[1] != null) {
                 var columnIndex = columns.getColumnsIndexOfCard(solution[1]!!)
                 if (columnIndex != null) {
-                    println("" + solution[0]!!.rank + solution[0]!!.suit + "-" + (columnIndex + 1))
+                    println("" + solution[0]!!.suit + solution[0]!!.rank + "-" + (columnIndex + 1))
                 }
                 if (columnIndex == null) {
-                    println("" + solution[0]!!.rank + solution[0]!!.suit + "-F")
+                    println("" + solution[0]!!.suit + solution[0]!!.rank + "-F")
                 }
             }
             if (solution[1] == null) {
@@ -107,10 +107,10 @@ class SolitaireSolver {
                             columnIndex++
                         }
                     }
-                    println("" + solution[0]!!.rank + solution[0]!!.suit + "-" + columnIndex)
+                    println("" + solution[0]!!.suit + solution[0]!!.rank + "-" + columnIndex)
                 }
                 if (solution[0]!!.rank == 1) {
-                    println("" + solution[0]!!.rank + solution[0]!!.suit + "-" + "F")
+                    println("" + solution[0]!!.suit + solution[0]!!.rank + "-" + "F")
                 }
             }
             if (solution[0]!!.rank == columns.getTalonCard().rank && solution[0]!!.suit == columns.getTalonCard().suit && cardsInBotAndTop < 49){
