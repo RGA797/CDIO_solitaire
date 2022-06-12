@@ -153,6 +153,7 @@ class SolitaireSolver {
         //prioritizes bottom to bottom transfers, then bottom to top.
         solution = generalSolution()
         if (solution != null) {
+
             return solution
         }
 
@@ -544,6 +545,7 @@ class SolitaireSolver {
     //second index: to
     //null in return list means an empty column
     private fun getViableMove(card: Card, useRuleFour: Boolean, useRuleFive: Boolean, useRuleSix: Boolean, useRuleSeven: Boolean, useRuleEight: Boolean): MutableList<Card?>? {
+
         val bottomColumns = columns.getBottomList()
         val topColumns = columns.getTopList()
         var ownColumn: Boolean
@@ -679,13 +681,36 @@ class SolitaireSolver {
             }
         }
 
+        //we do not consider moving cards from bottom to bottom if they sit on a viable target (to avoid loops)
+        for (i in bottomSolutions.indices){
+            if (bottomSolutions[i] != null) {
+                val columnIndex = columns.getColumnsIndexOfCard(bottomSolutions[i]!![0]!!)
+                if (columnIndex != null){
+                    for (j in bottomColumns[columnIndex].indices){
+                        if (bottomColumns[columnIndex][j].rank == card.rank && bottomColumns[columnIndex][j].suit == card.suit){
+                            try {
+                                if (!bottomColumns[columnIndex][j+1].isDowncard){
+                                    if (isValidMove(card, bottomColumns[columnIndex][j+1], bottomRules = true)){
+                                        bottomSolutions[i] = null
+                                    }
+                                }
+
+                            }catch (e: IndexOutOfBoundsException){
+                                continue
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+
         //remove null values from solution list (solutions that violate algorithm rules)
         for (i in bottomSolutions.indices){
             if (bottomSolutions[i] == null){
                 bottomSolutions.removeAt(i)
             }
         }
-
 
         //the order in which solutions are given as the "optimal play", is decided to be bottom solutions before top solutions
 
