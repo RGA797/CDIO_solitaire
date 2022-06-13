@@ -332,10 +332,10 @@ class SolutionUnitTest {
     @Test
     fun contest(){
         val solitaireSolver = SolitaireSolver()
-        solitaireSolver.setNumberOfCardInStock(0)
-        solitaireSolver.setNumberOfCardInTalon(0)
+        solitaireSolver.setNumberOfCardInStock(14)
+        solitaireSolver.setNumberOfCardInTalon(3)
 
-        val bottom_column1: MutableList<Card> = mutableListOf(Card(11,"S", false))
+        val bottom_column1: MutableList<Card> = mutableListOf(Card(13,"H",false))
         val bottom_column2: MutableList<Card> = mutableListOf(Card(13,"H",false))
         val bottom_column3: MutableList<Card> = mutableListOf(Card(13,"H",false))
         val bottom_column4: MutableList<Card> = mutableListOf(Card(13,"H",false))
