@@ -332,8 +332,8 @@ class SolutionUnitTest {
     @Test
     fun contest(){
         val solitaireSolver = SolitaireSolver()
-        solitaireSolver.setNumberOfCardInStock(15)
-        solitaireSolver.setNumberOfCardInTalon(4)
+        solitaireSolver.setNumberOfCardInStock(2)
+        solitaireSolver.setNumberOfCardInTalon(0)
 
         val bottom_column1: MutableList<Card> = mutableListOf(Card(13,"H",false))
         val bottom_column2: MutableList<Card> = mutableListOf(Card(13,"H",false))
