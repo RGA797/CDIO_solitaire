@@ -103,7 +103,7 @@ class SolitaireSolver {
                         println("T")
                         return
                     }
-                    if (cardsInStock + cardsInTalon < 3) {
+                    if (cardsInStock + cardsInTalon < 3 && cardsInStock != 0) {
                         println("game over")
                         return
                     }

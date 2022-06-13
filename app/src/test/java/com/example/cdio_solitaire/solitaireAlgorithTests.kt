@@ -332,10 +332,10 @@ class SolutionUnitTest {
     @Test
     fun contest(){
         val solitaireSolver = SolitaireSolver()
-        solitaireSolver.setNumberOfCardInStock(2)
+        solitaireSolver.setNumberOfCardInStock(0)
         solitaireSolver.setNumberOfCardInTalon(0)
 
-        val bottom_column1: MutableList<Card> = mutableListOf(Card(13,"H",false))
+        val bottom_column1: MutableList<Card> = mutableListOf(Card(11,"S", false))
         val bottom_column2: MutableList<Card> = mutableListOf(Card(13,"H",false))
         val bottom_column3: MutableList<Card> = mutableListOf(Card(13,"H",false))
         val bottom_column4: MutableList<Card> = mutableListOf(Card(13,"H",false))
@@ -343,7 +343,7 @@ class SolutionUnitTest {
         val bottom_column6: MutableList<Card> = mutableListOf(Card(13,"H",false))
         val bottom_column7: MutableList<Card> = mutableListOf(Card(13,"H",false))
 
-        val top_column1: MutableList<Card> = mutableListOf(Card(11,"S", false),Card(10,"S",false),Card(9,"S",false),Card(8,"S",false),Card(7,"S",false),Card(6,"S",false),Card(5,"S", false),Card(4,"S", false),Card(3,"S", false),Card(2,"S", false),Card(1,"S",false))
+        val top_column1: MutableList<Card> = mutableListOf(Card(10,"S",false),Card(9,"S",false),Card(8,"S",false),Card(7,"S",false),Card(6,"S",false),Card(5,"S", false),Card(4,"S", false),Card(3,"S", false),Card(2,"S", false),Card(1,"S",false))
         val top_column2: MutableList<Card> = mutableListOf(Card(13,"H",false),Card(12,"H",false),Card(11,"H",false),Card(10,"H",false),Card(9,"H",false),Card(8,"H",false),Card(7,"H",false),Card(6,"H", false),Card(5,"H",false),Card(4,"H",false),Card(3,"H",false),Card(2,"H",false),Card(1,"H", false))
         val top_column3: MutableList<Card> = mutableListOf(Card(13,"C",false),Card(12,"C", false),Card(11,"C", false),Card(10,"C", false),Card(9,"C", false),Card(8,"C", false),Card(7,"C", false),Card(6,"C", false),Card(5,"C", false),Card(4,"C", false),Card(3,"C", false),Card(2,"C", false),Card(1,"C",false))
         val top_column4: MutableList<Card> = mutableListOf(Card(13,"D",false),Card(12,"D",false),Card(11,"D", false),Card(10,"D", false),Card(9,"D", false),Card(8,"D", false),Card(7,"D",false),Card(6,"D",false),Card(5,"D", false),Card(4,"D", false),Card(3,"D", false),Card(2,"D", false),Card(1,"D", false))
