@@ -76,9 +76,6 @@ class SolitaireSolver {
 
     fun printContestSolution(solution: List<Card?>?){
         val cardsInBotAndTop = getNumberOfCardsInBotAndTop()
-
-
-
         if (solution != null) {
             if (solution[0]!!.suit == "D"){
                 solution[0]!!.suit = "R"
@@ -205,10 +202,10 @@ class SolitaireSolver {
                     if (!j.isDowncard) {
                         val viableMove = getViableMove(
                             j,
-                            useRuleFour = true,
+                            useRuleFour = false,
                             useRuleFive = true,
                             useRuleSix = true,
-                            useRuleSeven = true,
+                            useRuleSeven = false,
                             useRuleEight = true,
                         )
                         if (viableMove != null) {
@@ -329,42 +326,41 @@ class SolitaireSolver {
     //returns true if there is a king waiting to take a spot after moving a card
     //note: the function assumes that a solution exists, and will still return true if the play will not actually clear the spot
     //only returns false if a play will clear a spot AND there isn't a king waiting to take it
-    fun ruleFive(card: Card): Boolean{
+    fun ruleFive(card: Card): Boolean {
         val bottomList = columns.getBottomList()
         var kingWaiting = false
         var emptySpot = false
-        var cardFound = false
-        for (i in bottomList) {
-            if (i.isNotEmpty()) {
-                if (!cardFound || !kingWaiting) {
-                    var index = 0
-                    for (j in i) {
-                        if (j.rank == card.rank && j.suit == card.suit) {
-                            if (i.size - index == 1) {
-                                emptySpot = true
-                            }
-                            cardFound = true
-                        }
 
-                        if (j.rank == 13 && !j.isDowncard) {
-                            if (j.rank == card.rank && j.suit == card.suit){
-                                continue
-                            }
-                            else{
-                                kingWaiting = true
-                            }
+        for (cardList in bottomList) {
+            if (cardList.isNotEmpty()) {
+                for (index in cardList.indices) {
+                    if (cardList[index].rank == 13 && !cardList[index].isDowncard) {
+                        if (cardList[index].rank == card.rank && cardList[index].suit == card.suit) {
+                            continue
                         }
-
-                        if (cardFound && kingWaiting){
+                        if (cardList.size - index == 1) {
+                            continue
+                        } else {
+                            kingWaiting = true
                             break
                         }
-                        index++
                     }
                 }
             }
-            if (kingWaiting && emptySpot){
-                return true
+        }
+        for (cardList in bottomList) {
+            if (cardList.isNotEmpty()) {
+                for (index in cardList.indices) {
+                    if (cardList[index].rank == card.rank && cardList[index].suit == card.suit) {
+                        if (cardList.size - index == 1) {
+                            emptySpot = true
+                        }
+                    }
+                }
             }
+        }
+        if (kingWaiting && emptySpot){
+            return true
         }
         if (!kingWaiting && emptySpot){
             return false
@@ -394,11 +390,10 @@ class SolitaireSolver {
             if (allowsFreedDowncard(solution[0]!!)) {
                 return true
             }
-            if ( ruleFive(solution[0]!!)){
+            if (ruleFive(solution[0]!!)){
                 return true
             }
         }
-
         return false
     }
 
@@ -439,12 +434,12 @@ class SolitaireSolver {
                 return true
             }
         }
-
         return false
     }
 
     private fun ruleNine(bottomSolutions: MutableList<MutableList<Card?>?>, topSolutions: MutableList<MutableList<Card?>?>): MutableList<Card?>?{
         //if given a choice(bottom solution), use rule 3
+
         if (bottomSolutions.size > 1){
             return ruleThree(bottomSolutions)
         }
@@ -670,11 +665,13 @@ class SolitaireSolver {
 
         //rule eight
         if (useRuleEight){
-            for (i in bottomSolutions.indices) {
-                if (bottomSolutions[i] != null) {
-                    if (bottomSolutions[i]?.get(0)?.rank == 13) {
-                        if (!bottomSolutions[i]?.let { ruleEight(it, bottomSolutions) }!!) {
-                            bottomSolutions[i] = null
+            if (bottomSolutions.isNotEmpty()) {
+                for (i in bottomSolutions.indices) {
+                    if (bottomSolutions[i] != null) {
+                        if (bottomSolutions[i]?.get(0)?.rank == 13) {
+                            if (!bottomSolutions[i]?.let { ruleEight(it, bottomSolutions) }!!) {
+                                bottomSolutions[i] = null
+                            }
                         }
                     }
                 }
@@ -694,7 +691,6 @@ class SolitaireSolver {
                                         bottomSolutions[i] = null
                                     }
                                 }
-
                             }catch (e: IndexOutOfBoundsException){
                                 continue
                             }
@@ -706,9 +702,13 @@ class SolitaireSolver {
 
 
         //remove null values from solution list (solutions that violate algorithm rules)
-        for (i in bottomSolutions.indices){
-            if (bottomSolutions[i] == null){
-                bottomSolutions.removeAt(i)
+        if (bottomSolutions.isNotEmpty()) {
+            var removed = 0
+            for (i in bottomSolutions.indices) {
+                if (bottomSolutions[i-removed] == null) {
+                    bottomSolutions.removeAt(i-removed)
+                    removed++
+                }
             }
         }
 
