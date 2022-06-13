@@ -7,6 +7,8 @@ import java.lang.IndexOutOfBoundsException
 //controller class meant to follow the ruling given in following article: https://www.chessandpoker.com/solitaire_strategy.html
 //uses column model class
 class SolitaireSolver {
+    private var cardsInStock = 24
+    private var cardsInTalon = 0
     private val columns = Columns()
     private var bottomSolutions: MutableList<MutableList<Card?>?> = mutableListOf()
     private var topSolutions: MutableList<MutableList<Card?>?> = mutableListOf()
@@ -30,7 +32,6 @@ class SolitaireSolver {
     fun clear(){
         columns.clear()
     }
-
 
     fun printList(){
         for (i in columns.getBottomList()){
@@ -76,60 +77,78 @@ class SolitaireSolver {
             }
         }
     }
-
-    fun printContestSolution(solution: List<Card?>?){
-        val cardsInBotAndTop = getNumberOfCardsInBotAndTop()
-        if (solution != null) {
-            if (solution[0]!!.suit == "D"){
-                solution[0]!!.suit = "R"
-            }
-
-            if (solution[0]!!.suit == "C"){
-                solution[0]!!.suit = "K"
-            }
-            if (solution[1] != null) {
-                var columnIndex = columns.getColumnsIndexOfCard(solution[1]!!)
-                if (columnIndex != null) {
-                    println("" + solution[0]!!.suit + solution[0]!!.rank + "-" + (columnIndex + 1))
+    fun printContestSolution(){
+            val solution = solve()
+            val cardsInBotAndTop = getNumberOfCardsInBotAndTop()
+            if (solution != null) {
+                if (solution[0]!!.suit == "D"){
+                    solution[0]!!.suit = "R"
                 }
-                if (columnIndex == null) {
-                    println("" + solution[0]!!.suit + solution[0]!!.rank + "-F")
+
+                if (solution[0]!!.suit == "C"){
+                    solution[0]!!.suit = "K"
                 }
-            }
-            if (solution[1] == null) {
-                if (solution[0]!!.rank == 13) {
-                    var columnIndex = 1
-                    for (i in columns.getBottomList()){
-                        if (i.isEmpty()){
-                            break
+
+                if (solution[0]!!.rank == columns.getTalonCard().rank && solution[0]!!.suit == columns.getTalonCard().suit){
+                    if (cardsInStock < 3 && cardsInTalon < 3){
+                        if (cardsInTalon == 0 || cardsInStock == 0){
+                            println("Game over")
                         }
                         else{
-                            columnIndex++
+                            cardsInStock = 0
+                            cardsInTalon = 3
+                            println("S")
+                            println("T")
                         }
+                        return
                     }
-                    println("" + solution[0]!!.suit + solution[0]!!.rank + "-" + columnIndex)
+                    else{
+                        cardsInTalon--
+                    }
                 }
-                if (solution[0]!!.rank == 1) {
-                    println("" + solution[0]!!.suit + solution[0]!!.rank + "-" + "F")
+
+                if (solution[1] != null) {
+                    var columnIndex = columns.getColumnsIndexOfCard(solution[1]!!)
+                    if (columnIndex != null) {
+                        println("" + solution[0]!!.suit + solution[0]!!.rank + "-" + (columnIndex + 1))
+                    }
+                    if (columnIndex == null) {
+                        println("" + solution[0]!!.suit + solution[0]!!.rank + "-F")
+                    }
                 }
-            }
-            if (solution[0]!!.rank == columns.getTalonCard().rank && solution[0]!!.suit == columns.getTalonCard().suit && cardsInBotAndTop < 49){
-                if (columns.getTalonCard().rank != null && columns.getTalonCard().rank != null) {
-                    println(",S")
+                if (solution[1] == null) {
+                    if (solution[0]!!.rank == 13) {
+                        var columnIndex = 1
+                        for (i in columns.getBottomList()){
+                            if (i.isEmpty()){
+                                break
+                            }
+                            else{
+                                columnIndex++
+                            }
+                        }
+                        println("" + solution[0]!!.suit + solution[0]!!.rank + "-" + columnIndex)
+                    }
+                    if (solution[0]!!.rank == 1) {
+                        println("" + solution[0]!!.suit + solution[0]!!.rank + "-" + "F")
+                    }
                 }
-                println(",T")
-            }
-    }
-    else{
-            if (cardsInBotAndTop < 49) {
-                if (columns.getTalonCard().rank != null && columns.getTalonCard().rank != null) {
-                    println(",S")
-                }
-                println(",T")
             }
             else{
-                println("game over")
-            }
+                if (cardsInStock <3) {
+                    if (cardsInTalon >0) {
+                        println("S")
+                        cardsInStock = cardsInStock + cardsInTalon
+                        cardsInTalon = 0
+                    }
+                    else{
+                        println("game over")
+                        return
+                    }
+                }
+                println("T")
+                cardsInStock = cardsInStock - 3
+                cardsInTalon = cardsInTalon + 3
                 return
             }
     }
