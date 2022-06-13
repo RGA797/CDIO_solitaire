@@ -187,7 +187,6 @@ class Columns() {
                 }
                 return cardIndex
         }
-
         //returns number of downcards in the bottom column of given card.
         //returns 0 if the card doesnt exist, or there are no downcards
         public fun getNumberOfDowncardsForCard(card: Card): Int {

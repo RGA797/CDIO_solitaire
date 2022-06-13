@@ -13,6 +13,13 @@ class SolitaireSolver {
     private var bottomSolutions: MutableList<MutableList<Card?>?> = mutableListOf()
     private var topSolutions: MutableList<MutableList<Card?>?> = mutableListOf()
 
+    fun setNumberOfCardInStock(number: Int){
+        cardsInStock = number
+    }
+    fun setNumberOfCardInTalon(number: Int){
+        cardsInTalon = number
+    }
+
     //adds one card to bottom column at index
     fun addBottomCard (rank: Int?, suit: String?, isDowncard: Boolean, columnIndex: Int){
         columns.addToBottomList(rank, suit, isDowncard, columnIndex)
@@ -77,79 +84,86 @@ class SolitaireSolver {
             }
         }
     }
-    fun printContestSolution(){
-            val solution = solve()
-            if (solution != null) {
-                if (solution[0]!!.suit == "D"){
-                    solution[0]!!.suit = "R"
-                }
+    fun printContestSolution() {
+        val solution = solve()
+        if (solution != null) {
+            if (solution[0]!!.suit == "D") {
+                solution[0]!!.suit = "R"
+            }
 
-                if (solution[0]!!.suit == "C"){
-                    solution[0]!!.suit = "K"
-                }
-
-                if (solution[0]!!.rank == columns.getTalonCard().rank && solution[0]!!.suit == columns.getTalonCard().suit){
-                    if (cardsInStock < 3 && cardsInTalon < 3){
-                        if (cardsInTalon == 0 || cardsInStock == 0){
-                            println("Game over")
-                        }
-                        else{
-                            cardsInStock = 0
-                            cardsInTalon = 3
-                            println("S")
-                            println("T")
-                        }
+            if (solution[0]!!.suit == "C") {
+                solution[0]!!.suit = "K"
+            }
+            if (solution[0]!!.rank == columns.getTalonCard().rank && solution[0]!!.suit == columns.getTalonCard().suit) {
+                if (cardsInStock < 3 && cardsInTalon < 3) {
+                    if (cardsInStock + cardsInTalon == 3) {
+                        cardsInStock = 0
+                        cardsInTalon = 3
+                        println("S")
+                        println("T")
                         return
                     }
-                    else{
-                        cardsInTalon--
-                    }
-                }
-
-                if (solution[1] != null) {
-                    var columnIndex = columns.getColumnsIndexOfCard(solution[1]!!)
-                    if (columnIndex != null) {
-                        println("" + solution[0]!!.suit + solution[0]!!.rank + "-" + (columnIndex + 1))
-                    }
-                    if (columnIndex == null) {
-                        println("" + solution[0]!!.suit + solution[0]!!.rank + "-F")
-                    }
-                }
-                if (solution[1] == null) {
-                    if (solution[0]!!.rank == 13) {
-                        var columnIndex = 1
-                        for (i in columns.getBottomList()){
-                            if (i.isEmpty()){
-                                break
-                            }
-                            else{
-                                columnIndex++
-                            }
-                        }
-                        println("" + solution[0]!!.suit + solution[0]!!.rank + "-" + columnIndex)
-                    }
-                    if (solution[0]!!.rank == 1) {
-                        println("" + solution[0]!!.suit + solution[0]!!.rank + "-" + "F")
-                    }
-                }
-            }
-            else{
-                if (cardsInStock <3) {
-                    if (cardsInTalon >0) {
-                        println("S")
-                        cardsInStock = cardsInStock + cardsInTalon
-                        cardsInTalon = 0
-                    }
-                    else{
+                    if (cardsInStock + cardsInTalon < 3) {
                         println("game over")
                         return
                     }
                 }
+            }
+
+            if (solution[1] != null) {
+                var columnIndex = columns.getColumnsIndexOfCard(solution[1]!!)
+                if (columnIndex != null) {
+                    println("" + solution[0]!!.suit + solution[0]!!.rank + "-" + (columnIndex + 1))
+                }
+                if (columnIndex == null) {
+                    println("" + solution[0]!!.suit + solution[0]!!.rank + "-F")
+                }
+            }
+            if (solution[1] == null) {
+                if (solution[0]!!.rank == 13) {
+                    var columnIndex = 1
+                    for (i in columns.getBottomList()) {
+                        if (i.isEmpty()) {
+                            break
+                        } else {
+                            columnIndex++
+                        }
+                    }
+                    println("" + solution[0]!!.suit + solution[0]!!.rank + "-" + columnIndex)
+                }
+                if (solution[0]!!.rank == 1) {
+                    println("" + solution[0]!!.suit + solution[0]!!.rank + "-" + "F")
+                }
+            }
+
+            if (solution[0]!!.rank == columns.getTalonCard().rank && solution[0]!!.suit == columns.getTalonCard().suit) {
+                cardsInTalon--
+            }
+        } else {
+            if (cardsInStock == 0 && cardsInTalon == 3) {
+                println("game over")
+                return
+            }
+            if (cardsInStock < 3) {
+                if (cardsInTalon + cardsInStock < 3) {
+                    println("game over")
+                    return
+                }
+                if (cardsInTalon + cardsInStock >= 3) {
+                    println("S")
+                    println("T")
+                    cardsInStock = cardsInStock + cardsInTalon - 3
+                    cardsInTalon = 3
+                    return
+                }
+            }
+            if (cardsInStock >= 3) {
                 println("T")
                 cardsInStock = cardsInStock - 3
                 cardsInTalon = cardsInTalon + 3
                 return
             }
+        }
     }
 
     //solution algorithm. follows rules of the mentioned article
