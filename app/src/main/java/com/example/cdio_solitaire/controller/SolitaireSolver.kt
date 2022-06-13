@@ -79,7 +79,6 @@ class SolitaireSolver {
     }
     fun printContestSolution(){
             val solution = solve()
-            val cardsInBotAndTop = getNumberOfCardsInBotAndTop()
             if (solution != null) {
                 if (solution[0]!!.suit == "D"){
                     solution[0]!!.suit = "R"
