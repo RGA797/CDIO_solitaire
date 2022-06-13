@@ -359,8 +359,6 @@ class SolutionUnitTest {
         addTopCards(solitaireSolver, top_column3, 2)
         addTopCards(solitaireSolver, top_column4, 3)
 
-
         solitaireSolver.printContestSolution(solitaireSolver.solve())
     }
-
 }

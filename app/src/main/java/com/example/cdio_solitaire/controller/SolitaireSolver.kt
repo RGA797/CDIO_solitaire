@@ -27,6 +27,9 @@ class SolitaireSolver {
         return columns.getCardsInBotAndTop()
     }
 
+    fun clear(){
+        columns.clear()
+    }
 
 
     fun printList(){
